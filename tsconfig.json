@@ -20,12 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@maglo/shared/*": ["packages/shared/src/*"],
-      "@maglo/config/*": ["packages/config/src/*"]
-    }
+    "resolveJsonModule": true
   },
   "include": [
     "apps/**/*",
