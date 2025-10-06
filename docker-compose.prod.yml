@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-maglo}
+      POSTGRES_USER: ${POSTGRES_USER:-maglo_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-maglo_user} -d ${POSTGRES_DB:-maglo}",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+      target: runner
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-maglo_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-maglo}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      NODE_ENV: production
+      PORT: 4000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      target: runner
+    environment:
+      VITE_GRAPHQL_URL: ${VITE_GRAPHQL_URL:-http://localhost:4000/graphql}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
