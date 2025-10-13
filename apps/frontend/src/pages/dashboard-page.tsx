@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUsers } from '../hooks/useAuth';
+import { useUsers } from '../hooks/use-auth';
 
 export const DashboardPage: React.FC = () => {
   const { data: users, isLoading, error } = useUsers();

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useLogin } from '../hooks/useAuth';
+import { useLogin } from '../hooks/use-auth';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');

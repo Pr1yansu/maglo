@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { gql } from '@apollo/client';
 import { client } from '../graphql/client';
-import { useAuth } from '../contexts/AuthContext';
-import { queryClient } from '../lib/queryClient';
+import { useAuth } from '../contexts/auth-context';
+import { queryClient } from '../lib/query-client';
 
 // GraphQL Mutations and Queries
 const LOGIN_MUTATION = gql`
