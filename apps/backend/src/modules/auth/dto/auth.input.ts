@@ -2,6 +2,12 @@ import { InputType, Field, ObjectType } from '@nestjs/graphql';
 import { IsEmail, IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 
+export enum SocialProvider {
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+  GITHUB = 'github',
+}
+
 @InputType()
 export class LoginInput {
   @Field()
@@ -51,4 +57,32 @@ export class AuthResponse {
 
   @Field(() => User)
   user!: User;
+}
+
+@InputType()
+export class SocialAuthInput {
+  @Field()
+  provider!: SocialProvider;
+
+  @Field()
+  @IsString()
+  accessToken!: string;
+}
+
+@InputType()
+export class PhoneSendInput {
+  @Field()
+  @IsString()
+  phone!: string;
+}
+
+@InputType()
+export class PhoneVerifyInput {
+  @Field()
+  @IsString()
+  phone!: string;
+
+  @Field()
+  @IsString()
+  code!: string;
 }

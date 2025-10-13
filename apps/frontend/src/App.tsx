@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Layout } from './components/Layout';
-import { HomePage } from './pages/HomePage';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { DashboardPage } from './pages/DashboardPage';
+import { Layout } from './components/layout';
+import { HomePage } from './pages/home-page';
+import { LoginPage } from './pages/login-page';
+import { RegisterPage } from './pages/register-page';
+import { DashboardPage } from './pages/dashboard-page';
 
 function App() {
   return (
