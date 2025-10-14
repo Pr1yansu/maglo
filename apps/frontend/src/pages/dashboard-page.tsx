@@ -1,6 +1,17 @@
 import React from 'react';
 import { useUsers } from '../hooks/use-auth';
 import { SEO } from '../components/seo';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../components/ui/table';
 
 export const DashboardPage: React.FC = () => {
   const { data: users, isLoading, error } = useUsers();
@@ -15,24 +26,41 @@ export const DashboardPage: React.FC = () => {
         noindex={true}
       />
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Welcome to your dashboard!</p>
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome to your dashboard!</p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Users</h3>
-            <p className="text-3xl font-bold text-primary-600">
-              {isLoading ? '...' : users?.length || 0}
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Projects</h3>
-            <p className="text-3xl font-bold text-primary-600">0</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Tasks</h3>
-            <p className="text-3xl font-bold text-primary-600">0</p>
-          </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{isLoading ? '...' : users?.length || 0}</div>
+              <p className="text-xs text-muted-foreground">Registered users in the system</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">0</div>
+              <p className="text-xs text-muted-foreground">Active projects</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Tasks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">0</div>
+              <p className="text-xs text-muted-foreground">Pending tasks</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Users List */}

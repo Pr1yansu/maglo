@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLogin } from '../hooks/use-auth';
 import { SEO } from '../components/seo';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Alert, AlertDescription } from '../components/ui/alert';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -34,60 +39,59 @@ export const LoginPage: React.FC = () => {
         url="/login"
         noindex={true}
       />
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Sign in to your account
-            </h2>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            {loginMutation.error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                Login failed. Please check your credentials.
-              </div>
-            )}
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">Sign in</CardTitle>
+            <CardDescription className="text-center">
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {loginMutation.error && (
+                <Alert variant="destructive">
+                  <AlertDescription>Login failed. Please check your credentials.</AlertDescription>
+                </Alert>
+              )}
 
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <input
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
                   type="email"
+                  placeholder="Enter your email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
                 />
               </div>
-              <div>
-                <input
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
                   type="password"
+                  placeholder="Enter your password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
                 />
               </div>
-            </div>
 
-            <div>
-              <button
-                type="submit"
-                disabled={loginMutation.isPending}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
-              >
+              <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
                 {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
-              </button>
-            </div>
+              </Button>
 
-            <div className="text-center">
-              <Link to="/register" className="text-primary-600 hover:text-primary-500">
-                Don't have an account? Sign up
-              </Link>
-            </div>
-          </form>
-        </div>
+              <div className="text-center text-sm">
+                <span className="text-muted-foreground">Don't have an account? </span>
+                <Link to="/register" className="text-primary underline-offset-4 hover:underline">
+                  Sign up
+                </Link>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </>
   );
