@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+// import { gsapOptimizationPlugin, analyzeGSAPUsage } from './src/lib/vite-gsap-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,6 +10,9 @@ export default defineConfig({
       // Enable JSX runtime for better performance
       jsxRuntime: 'automatic',
     }),
+    // GSAP optimization plugins
+    // gsapOptimizationPlugin(),
+    // analyzeGSAPUsage(),
   ],
   resolve: {
     alias: {
@@ -42,6 +46,8 @@ export default defineConfig({
           apollo: ['@apollo/client', 'graphql'],
           redux: ['@reduxjs/toolkit', 'react-redux'],
           query: ['@tanstack/react-query'],
+          // Separate GSAP chunk for animation features
+          gsap: ['gsap', '@gsap/react'],
         },
         // Better chunk naming for caching
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -64,7 +70,12 @@ export default defineConfig({
       'react-redux',
       '@tanstack/react-query',
       '@apollo/client',
+      // Include GSAP for faster dev startup
+      'gsap',
+      '@gsap/react',
     ],
+    // Exclude unused GSAP plugins to reduce bundle size
+    exclude: ['gsap/ScrollTrigger', 'gsap/TextPlugin', 'gsap/Draggable'],
   },
   // Enable CSS preprocessing optimizations
   css: {

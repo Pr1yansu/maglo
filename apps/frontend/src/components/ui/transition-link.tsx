@@ -1,8 +1,8 @@
 import React, { useRef, MouseEvent, ReactNode } from 'react';
 import { Link, To, useNavigate } from 'react-router-dom';
-import { useGSAP } from '@gsap/react';
-import { gsap } from 'gsap';
 import { cn } from '../../lib/utils';
+import { useOptimizedGSAP, useHoverAnimation } from '../../hooks/use-optimized-gsap';
+import { animations, responsive } from '../../lib/gsap-optimized';
 
 interface TransitionLinkProps {
   to: To;
@@ -37,35 +37,12 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   const linkRef = useRef<HTMLAnchorElement>(null);
   const navigate = useNavigate();
 
-  // GSAP hover animations
-  useGSAP(() => {
-    const link = linkRef.current;
-    if (!link || disabled) return;
-
-    const handleMouseEnter = () => {
-      gsap.to(link, {
-        scale: 1.02,
-        duration: 0.2,
-        ease: 'power2.out',
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(link, {
-        scale: 1,
-        duration: 0.2,
-        ease: 'power2.out',
-      });
-    };
-
-    link.addEventListener('mouseenter', handleMouseEnter);
-    link.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      link.removeEventListener('mouseenter', handleMouseEnter);
-      link.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [disabled]);
+  // Optimized hover animations
+  useHoverAnimation(linkRef, {
+    scale: 1.02,
+    duration: 0.2,
+    disabled,
+  });
 
   const handleClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
@@ -100,39 +77,33 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
 
   const performTransition = (): Promise<void> => {
     return new Promise((resolve) => {
-      if (transitionType === 'none') {
+      if (transitionType === 'none' || !responsive.shouldAnimate()) {
         resolve();
         return;
       }
 
       // Get the page container or body for transition
       const pageContainer = document.querySelector('[data-page-container]') || document.body;
+      const duration = responsive.getDuration(transitionDuration);
 
       switch (transitionType) {
         case 'fade':
-          gsap.to(pageContainer, {
-            opacity: 0,
-            duration: transitionDuration,
-            ease: 'power2.inOut',
+          animations.fade(pageContainer, {
+            duration,
             onComplete: resolve,
           });
           break;
 
         case 'slide':
-          gsap.to(pageContainer, {
-            x: '-100%',
-            duration: transitionDuration,
-            ease: 'power2.inOut',
+          animations.slide(pageContainer, {
+            duration,
             onComplete: resolve,
           });
           break;
 
         case 'scale':
-          gsap.to(pageContainer, {
-            scale: 0.95,
-            opacity: 0,
-            duration: transitionDuration,
-            ease: 'power2.inOut',
+          animations.scale(pageContainer, {
+            duration,
             onComplete: resolve,
           });
           break;
@@ -193,35 +164,29 @@ export const usePageTransition = () => {
   ) => {
     const { transitionType = 'fade', transitionDuration = 0.3, replace, state } = options || {};
 
-    if (transitionType !== 'none') {
+    if (transitionType !== 'none' && responsive.shouldAnimate()) {
       const pageContainer = document.querySelector('[data-page-container]') || document.body;
+      const duration = responsive.getDuration(transitionDuration);
 
       await new Promise<void>((resolve) => {
         switch (transitionType) {
           case 'fade':
-            gsap.to(pageContainer, {
-              opacity: 0,
-              duration: transitionDuration,
-              ease: 'power2.inOut',
+            animations.fade(pageContainer, {
+              duration,
               onComplete: resolve,
             });
             break;
 
           case 'slide':
-            gsap.to(pageContainer, {
-              x: '-100%',
-              duration: transitionDuration,
-              ease: 'power2.inOut',
+            animations.slide(pageContainer, {
+              duration,
               onComplete: resolve,
             });
             break;
 
           case 'scale':
-            gsap.to(pageContainer, {
-              scale: 0.95,
-              opacity: 0,
-              duration: transitionDuration,
-              ease: 'power2.inOut',
+            animations.scale(pageContainer, {
+              duration,
               onComplete: resolve,
             });
             break;
