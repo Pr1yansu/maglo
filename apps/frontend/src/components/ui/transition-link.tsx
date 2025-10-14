@@ -1,7 +1,7 @@
 import React, { useRef, MouseEvent, ReactNode } from 'react';
 import { Link, To, useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
-import { useOptimizedGSAP, useHoverAnimation } from '../../hooks/use-optimized-gsap';
+import { useHoverAnimation } from '../../hooks/use-optimized-gsap';
 import { animations, responsive } from '../../lib/gsap-optimized';
 
 interface TransitionLinkProps {

@@ -14,10 +14,22 @@ export default defineConfig({
     // gsapOptimizationPlugin(),
     // analyzeGSAPUsage(),
   ],
+  define: {
+    // Help resolve zod import issues
+    'process.env': {},
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@/components': resolve(__dirname, './src/components'),
+      '@/lib': resolve(__dirname, './src/lib'),
+      '@/utils': resolve(__dirname, './src/utils'),
+      '@/hooks': resolve(__dirname, './src/hooks'),
+      '@/pages': resolve(__dirname, './src/pages'),
+      '@/store': resolve(__dirname, './src/store'),
+      '@/graphql': resolve(__dirname, './src/graphql'),
       '@maglo/shared': resolve(__dirname, '../../packages/shared/src'),
+      '@maglo/config': resolve(__dirname, '../../packages/config/src'),
     },
   },
   server: {
@@ -73,6 +85,11 @@ export default defineConfig({
       // Include GSAP for faster dev startup
       'gsap',
       '@gsap/react',
+      // Include Zod and related packages
+      'zod',
+      '@hookform/resolvers',
+      '@hookform/resolvers/zod',
+      'react-hook-form',
     ],
     // Exclude unused GSAP plugins to reduce bundle size
     exclude: ['gsap/ScrollTrigger', 'gsap/TextPlugin', 'gsap/Draggable'],

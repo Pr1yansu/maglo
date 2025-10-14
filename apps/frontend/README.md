@@ -224,7 +224,7 @@ export const Layout = ({ children }) => {
       <nav className="bg-white shadow-lg">
         {/* Navigation content */}
       </nav>
-      <main className="max-w-7xl mx-auto py-6 px-4">
+      <main className=" mx-auto py-6 px-4">
         {children}
       </main>
     </div>
