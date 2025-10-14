@@ -7,6 +7,8 @@ import { AuthResolver } from './auth.resolver';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { TwilioService } from './twilio.service';
+import { ModuleRef } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { LocalStrategy } from './strategies/local.strategy';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy, LocalStrategy],
+  providers: [AuthService, AuthResolver, JwtStrategy, LocalStrategy, TwilioService],
   exports: [AuthService],
 })
 export class AuthModule {}
