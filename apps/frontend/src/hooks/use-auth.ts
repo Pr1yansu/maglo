@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { gql } from '@apollo/client';
 import { client } from '../graphql/client';
-import { useAuth } from '../contexts/auth-context';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { loginSuccess, logout, setLoading } from '../store/slices/auth-slice';
 import { queryClient } from '../lib/query-client';
 
 // GraphQL Mutations and Queries
@@ -60,8 +61,17 @@ const GET_USERS_QUERY = gql`
 `;
 
 // Auth hooks
+export const useAuth = () => {
+  const auth = useAppSelector((state) => state.auth);
+  return {
+    user: auth.user,
+    isAuthenticated: auth.isAuthenticated,
+    loading: auth.loading,
+  };
+};
+
 export const useLogin = () => {
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: async (variables: { email: string; password: string }) => {
@@ -72,14 +82,14 @@ export const useLogin = () => {
       return data.login;
     },
     onSuccess: (data) => {
-      login(data.access_token, data.user);
+      dispatch(loginSuccess({ token: data.access_token, user: data.user }));
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
 };
 
 export const useRegister = () => {
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: async (variables: {
@@ -96,20 +106,20 @@ export const useRegister = () => {
       return data.register;
     },
     onSuccess: (data) => {
-      login(data.access_token, data.user);
+      dispatch(loginSuccess({ token: data.access_token, user: data.user }));
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
 };
 
 export const useLogout = () => {
-  const { logout } = useAuth();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: async () => {
       // Clear any cached data
       queryClient.clear();
-      logout();
+      dispatch(logout());
     },
   });
 };
