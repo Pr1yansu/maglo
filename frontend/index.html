@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Icons and Manifest -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Viewport and SEO -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#3B82F6" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Performance hints -->
+    <meta http-equiv="X-DNS-Prefetch-Control" content="on" />
+    <link rel="dns-prefetch" href="//localhost:3000" />
+
+    <!-- Default meta (will be overridden by React Helmet) -->
+    <title>Maglo - Modern Web Application</title>
+    <meta
+      name="description"
+      content="A modern web application built with React, TypeScript, and NestJS"
+    />
+    <meta property="twitter:url" content="https://maglo.com/" />
+    <meta property="twitter:title" content="Maglo - Modern Web Application" />
+    <meta
+      property="twitter:description"
+      content="A modern web application built with React, TypeScript, and NestJS"
+    />
+    <meta property="twitter:image" content="/og-image.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
