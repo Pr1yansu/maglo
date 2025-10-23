@@ -51,7 +51,7 @@ const AuthLayout = () => {
 
 
     return (
-        <main className="p-3 min-h-screen h-screen overflow-hidden">
+        <main className="p-5 min-h-screen h-screen overflow-hidden">
             <section className="grid grid-cols-2 h-full w-full relative">
                 {/* Left Container */}
                 <div
@@ -63,15 +63,17 @@ const AuthLayout = () => {
                         <div className="space-y-4" ref={contentRef}>
                             <h2 className="text-2xl font-semibold">
                                 {pathname.includes("login")
-                                    ? "Welcome Back 👋"
-                                    : "Welcome to Our App"}
+                                    ? "Welcome back! 👋"
+                                    : "Join the Maglo community 🚀"}
                             </h2>
                             <div className="text-sm text-muted-foreground space-y-1">
-                                {pathname.includes("login") && <p>Today is a new day.</p>}
+                                {pathname.includes("login") && (
+                                    <p>Let&apos;s pick up right where you left off.</p>
+                                )}
                                 <p>
                                     {pathname.includes("login")
-                                        ? "To manage your finance, please log in to your account."
-                                        : "Join us today and take control of your finances!"}
+                                        ? "Log in to track your finances, set smart goals, and make confident money moves."
+                                        : "Create your free account and start managing your finances smarter — all in one place."}
                                 </p>
                             </div>
                             <div key={currentPath}>
