@@ -1,44 +1,50 @@
-import { Button } from '@/components/ui/button'
 import { SEO } from '@/components/SEO'
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
-import { useRef } from 'react'
 import { usePerformanceMetrics } from '@/lib/performance'
+import { lazy, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
+
+import MainLayout from '@/components/layouts/main-layout'
+import DashboardLayout from '@/components/layouts/dashboard-layout'
+import AuthLayout from '@/components/layouts/auth-layout'
+import ProtectedRoute from '@/components/protected-route'
+import Loader from '@/components/loader'
+
+const Home = lazy(() => import("../src/pages/home"));
+const Login = lazy(() => import("../src/pages/login"));
+const Register = lazy(() => import("../src/pages/register"));
+const Dashboard = lazy(() => import("../src/pages/dashboard"));
+const NotFound = lazy(() => import("../src/pages/not-found"));
+
 
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  // Monitor performance metrics
   usePerformanceMetrics()
-
-  useGSAP(() => {
-    gsap.from(containerRef.current, {
-      duration: 1,
-      y: 50,
-      opacity: 0,
-      ease: 'power2.out'
-    })
-  }, [])
-
   return (
     <>
       <SEO />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route element={<MainLayout />}>
+            <Route path='/' element={<Home />} />
+          </Route>
 
-      <div ref={containerRef} className="min-h-screen bg-background">
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8">
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-              Welcome to Maglo
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl">
-              A modern web application built with React, TypeScript, NestJS, GraphQL, and Drizzle ORM.
-            </p>
-            <Button size="lg">
-              Get Started
-            </Button>
-          </div>
-        </main>
-      </div>
+          {/* Auth Routes */}
+          <Route element={<AuthLayout />}>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+          </Route>
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+          {/* Not Found Route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+
+      </Suspense>
     </>
   )
-} export default App
+}
+export default App
