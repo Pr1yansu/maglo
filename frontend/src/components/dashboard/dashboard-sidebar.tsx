@@ -1,12 +1,13 @@
 import {
-  Calendar,
   Home,
-  Inbox,
   Search,
   Settings,
   LucideHelpCircle,
   LogOut,
   Bell,
+  ChartLine,
+  ReceiptCent,
+  Wallet,
 } from 'lucide-react'
 
 import {
@@ -34,23 +35,23 @@ const items = [
     icon: Home,
   },
   {
-    title: 'Search',
-    url: '/search',
-    icon: Search,
+    title: 'Transactions',
+    url: '/dashboard/transactions',
+    icon: ChartLine,
   },
   {
-    title: 'Inbox',
-    url: '/inbox',
-    icon: Inbox,
+    title: 'Invoices',
+    url: '/dashboard/invoices',
+    icon: ReceiptCent,
   },
   {
-    title: 'Calendar',
-    url: '/calendar',
-    icon: Calendar,
+    title: 'Wallets',
+    url: '/dashboard/wallets',
+    icon: Wallet,
   },
   {
     title: 'Settings',
-    url: '/settings',
+    url: '/dashboard/settings',
     icon: Settings,
   },
 ]
@@ -136,6 +137,7 @@ export function DashboardSidebar() {
 }
 
 export const DashboardHeader = () => {
+  const iconstyle = "!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer"
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex items-center justify-center">
@@ -143,8 +145,8 @@ export const DashboardHeader = () => {
         <h3 className="text-base font-medium">Dashboard</h3>
       </div>
       <div className="flex items-center gap-4">
-        <Search className="!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer" />
-        <Bell className="!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer" />
+        <Search className={iconstyle} />
+        <Bell className={iconstyle} />
         <Combobox name="account" data={frameworks} />
       </div>
     </div>
