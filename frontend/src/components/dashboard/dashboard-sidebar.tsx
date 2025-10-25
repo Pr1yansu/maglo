@@ -16,6 +16,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -76,10 +77,16 @@ const frameworks = [
 export function DashboardSidebar() {
   const pathname = useLocation().pathname
   return (
-    <Sidebar className="p-2">
-      <SidebarContent>
+    <Sidebar className='!border-r-0'>
+      <SidebarHeader className='px-3'>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-4 py-3 text-sm font-semibold dark:text-white">
+            Maglo
+          </SidebarGroupLabel>
+        </SidebarGroup>
+      </SidebarHeader>
+      <SidebarContent className='px-3'>
+        <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -87,13 +94,13 @@ export function DashboardSidebar() {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      'hover:bg-primary text-zinc-700 hover:text-zinc-900 py-5',
-                      pathname === item.url && 'bg-primary text-zinc-900'
+                      'hover:bg-primary text-zinc-700 hover:text-zinc-900 dark:text-secondary-foreground py-6 px-4  dark:hover:text-zinc-900 duration-300',
+                      pathname === item.url && 'bg-primary text-zinc-900 dark:text-zinc-900'
                     )}
                   >
                     <Link to={item.url}>
                       <item.icon className="!size-5" />
-                      <span className="text-sm font-semibold">
+                      <span className="text-sm font-bold">
                         {item.title}
                       </span>
                     </Link>
@@ -104,20 +111,20 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className='px-3'>
         <SidebarMenu>
           {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
                 className={cn(
-                  'hover:bg-primary text-zinc-700 hover:text-zinc-900 py-5',
-                  pathname === item.url && 'bg-primary text-zinc-900'
+                  'hover:bg-primary text-zinc-700 hover:text-zinc-900 dark:text-secondary-foreground py-6 px-4  dark:hover:text-zinc-900 duration-300',
+                  pathname === item.url && 'bg-primary text-zinc-900 dark:text-zinc-900'
                 )}
               >
                 <Link to={item.url}>
                   <item.icon className="!size-5" />
-                  <span className="text-sm font-semibold">{item.title}</span>
+                  <span className="text-sm font-bold">{item.title}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -136,8 +143,8 @@ export const DashboardHeader = () => {
         <h3 className="text-base font-medium">Dashboard</h3>
       </div>
       <div className="flex items-center gap-4">
-        <Search className="!size-5 text-zinc-600 hover:text-zinc-900 cursor-pointer" />
-        <Bell className="!size-5 text-zinc-600 hover:text-zinc-900 cursor-pointer" />
+        <Search className="!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer" />
+        <Bell className="!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer" />
         <Combobox name="account" data={frameworks} />
       </div>
     </div>

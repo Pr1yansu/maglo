@@ -5,6 +5,7 @@ import './index.css'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from './components/provider/theme-provider.tsx'
 
 const client = new ApolloClient({
     uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:3000/graphql',
@@ -13,11 +14,14 @@ const client = new ApolloClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <BrowserRouter>
-            <HelmetProvider>
-                <ApolloProvider client={client}>
-                    <App />
-                </ApolloProvider>
-            </HelmetProvider></BrowserRouter>
+        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            <BrowserRouter>
+                <HelmetProvider>
+                    <ApolloProvider client={client}>
+                        <App />
+                    </ApolloProvider>
+                </HelmetProvider>
+            </BrowserRouter>
+        </ThemeProvider>
     </React.StrictMode>,
 )
