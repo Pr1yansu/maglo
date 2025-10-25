@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="p-3 w-full">
+      <main className="p-5 w-full">
         <DashboardHeader />
         <Outlet />
       </main>

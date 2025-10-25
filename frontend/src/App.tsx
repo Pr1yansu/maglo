@@ -14,7 +14,8 @@ const Login = lazy(() => import("../src/pages/login"));
 const Register = lazy(() => import("../src/pages/register"));
 const Dashboard = lazy(() => import("./pages/dashboard/dashboard"));
 const Transactions = lazy(() => import("./pages/dashboard/transaction"));
-const Invoices = lazy(() => import("./pages/dashboard/invoices"));
+const Invoices = lazy(() => import("./pages/dashboard/invoices/invoices"));
+const CreateInvoice = lazy(() => import("./pages/dashboard/invoices/new-invoice"));
 const Wallets = lazy(() => import("./pages/dashboard/wallets"));
 const DashboardSettings = lazy(() => import("./pages/dashboard/settings"));
 const NotFound = lazy(() => import("../src/pages/not-found"));
@@ -43,6 +44,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/transactions" element={<Transactions />} />
             <Route path="/dashboard/invoices" element={<Invoices />} />
+            <Route path="/dashboard/invoices/new" element={<CreateInvoice />} />
             <Route path="/dashboard/wallets" element={<Wallets />} />
             <Route path="/dashboard/settings" element={<DashboardSettings />} />
           </Route>

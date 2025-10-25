@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,15 +19,41 @@ import {
 } from '@/components/ui/popover'
 import Image from '@/components/ui/image'
 
-export function Combobox({
+interface ComboboxOption {
+  label: string
+  value: string
+  image?: string
+}
+
+interface ComboboxProps {
+  data: ComboboxOption[]
+  name?: string
+  className?: string
+  onChange?: (value: string | null) => void
+  value?: string | null
+}
+
+export const Combobox: React.FC<ComboboxProps> = ({
   data,
   name,
-}: {
-  data: { label: string; value: string; image?: string }[]
-  name?: string
-}) {
+  className,
+  onChange,
+  value: controlledValue,
+}) => {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState('')
+  const [internalValue, setInternalValue] = React.useState('')
+
+  // If parent passes a controlled value, use that
+  const value = controlledValue ?? internalValue
+
+  const handleSelect = (currentValue: string) => {
+    const newValue = currentValue === value ? '' : currentValue
+    setInternalValue(newValue)
+    onChange?.(newValue || null)
+    setOpen(false)
+  }
+
+  const selected = data.find((item) => item.value === value)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,60 +62,50 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] justify-between", className)}
         >
-          {value ? (
+          {selected ? (
             <div className="flex items-center gap-2">
               <Image
-                src={
-                  data.find((framework) => framework.value === value)?.image ||
-                  'https://placehold.co/600x400'
-                }
-                alt={
-                  data.find((framework) => framework.value === value)?.label ||
-                  'https://placehold.co/600x400'
-                }
+                src={selected.image || 'https://placehold.co/600x400'}
+                alt={selected.label}
                 width={20}
                 height={20}
                 className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
               />
-              <p className="font-medium">
-                {data.find((framework) => framework.value === value)?.label}
-              </p>
+              <p className="font-medium">{selected.label}</p>
             </div>
           ) : (
-            `Select ${name}...`
+            `${name}...`
           )}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder={`Search ${name}...`} className="h-9" />
           <CommandList>
             <CommandEmpty>No {name} found.</CommandEmpty>
             <CommandGroup>
-              {data.map((framework) => (
+              {data.map((option) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue)
-                    setOpen(false)
-                  }}
+                  key={option.value}
+                  value={option.value}
+                  onSelect={() => handleSelect(option.value)}
                 >
                   <Image
-                    src={framework.image || 'https://placehold.co/600x400'}
-                    alt={framework.label}
+                    src={option.image || 'https://placehold.co/600x400'}
+                    alt={option.label}
                     width={20}
                     height={20}
                     className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
                   />
-                  <p className="font-medium">{framework.label}</p>
+                  <p className="font-medium">{option.label}</p>
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === framework.value ? 'opacity-100' : 'opacity-0'
+                      value === option.value ? 'opacity-100' : 'opacity-0'
                     )}
                   />
                 </CommandItem>

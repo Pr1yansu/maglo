@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Invoices = () => {
+const CreateInvoice = () => {
     return (
         <div>
 
@@ -8,4 +8,4 @@ const Invoices = () => {
     )
 }
 
-export default Invoices
+export default CreateInvoice

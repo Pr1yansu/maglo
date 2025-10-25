@@ -1,6 +1,5 @@
 import {
   Home,
-  Search,
   Settings,
   LucideHelpCircle,
   LogOut,
@@ -24,7 +23,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { Combobox } from '@/components/ui/combo-box'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 // Menu items.
@@ -95,15 +94,19 @@ export function DashboardSidebar() {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      'hover:bg-primary text-zinc-700 hover:text-zinc-900 dark:text-secondary-foreground py-6 px-4  dark:hover:text-zinc-900 duration-300',
-                      pathname === item.url && 'bg-primary text-zinc-900 dark:text-zinc-900'
+                      'group relative flex items-center gap-3 rounded-md py-6 px-4 text-sm font-bold',
+                      'text-zinc-700 dark:text-secondary-foreground',
+                      'transition-all duration-300 ease-in-out',
+                      'hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900',
+                      pathname === item.url &&
+                      'bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm'
                     )}
                   >
                     <Link to={item.url}>
-                      <item.icon className="!size-5" />
-                      <span className="text-sm font-bold">
-                        {item.title}
-                      </span>
+                      <item.icon
+                        className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                      />
+                      <span className="transition-colors duration-300 ease-in-out">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -119,13 +122,19 @@ export function DashboardSidebar() {
               <SidebarMenuButton
                 asChild
                 className={cn(
-                  'hover:bg-primary text-zinc-700 hover:text-zinc-900 dark:text-secondary-foreground py-6 px-4  dark:hover:text-zinc-900 duration-300',
-                  pathname === item.url && 'bg-primary text-zinc-900 dark:text-zinc-900'
+                  'group relative flex items-center gap-3 rounded-md py-6 px-4 text-sm font-bold',
+                  'text-zinc-700 dark:text-secondary-foreground',
+                  'transition-all duration-300 ease-in-out',
+                  'hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900',
+                  pathname === item.url &&
+                  'bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm'
                 )}
               >
                 <Link to={item.url}>
-                  <item.icon className="!size-5" />
-                  <span className="text-sm font-bold">{item.title}</span>
+                  <item.icon
+                    className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  />
+                  <span className="transition-colors duration-300 ease-in-out">{item.title}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -136,17 +145,46 @@ export function DashboardSidebar() {
   )
 }
 
+const routeTitles: Record<string, string> = {
+  '/dashboard': 'Dashboard',
+  '/dashboard/transactions': 'Transactions',
+  '/dashboard/invoices': 'Invoices',
+  '/dashboard/wallets': 'Wallets',
+  '/dashboard/settings': 'Settings',
+  '/dashboard/invoices/new': 'New Invoice',
+}
+
 export const DashboardHeader = () => {
-  const iconstyle = "!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer"
+  const location = useLocation()
+  const [params] = useSearchParams()
+  const invoiceNumber = params.get('invoiceNumber')
+
+  const iconStyle =
+    "!size-5 text-zinc-600 hover:text-primary dark:text-secondary-foreground dark:hover:text-primary cursor-pointer"
+
+  const normalizedPath = location.pathname.replace(/\/$/, '')
+
+  const baseTitle =
+    routeTitles[normalizedPath] ||
+    routeTitles[
+    Object.keys(routeTitles).find((route) => normalizedPath.startsWith(route)) || ''
+    ] ||
+    ''
+
+  const pageTitle =
+    normalizedPath.startsWith('/dashboard/invoices/new') && invoiceNumber
+      ? `${baseTitle} : ${invoiceNumber}`
+      : baseTitle
+
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full mb-3">
       <div className="flex items-center justify-center">
         <SidebarTrigger />
-        <h3 className="text-base font-medium">Dashboard</h3>
+        <h3 className="text-base font-medium">{pageTitle}</h3>
       </div>
+
       <div className="flex items-center gap-4">
-        <Search className={iconstyle} />
-        <Bell className={iconstyle} />
+        <Bell className={iconStyle} />
         <Combobox name="account" data={frameworks} />
       </div>
     </div>
