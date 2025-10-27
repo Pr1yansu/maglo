@@ -23,8 +23,12 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { Combobox } from '@/components/ui/combo-box'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { useRef } from 'react'
+import Link from '@/components/ui/link'
 
 // Menu items.
 const items = [
@@ -32,26 +36,31 @@ const items = [
     title: 'Dashboard',
     url: '/dashboard',
     icon: Home,
+    index: 0,
   },
   {
     title: 'Transactions',
     url: '/dashboard/transactions',
     icon: ChartLine,
+    index: 1,
   },
   {
     title: 'Invoices',
     url: '/dashboard/invoices',
     icon: ReceiptCent,
+    index: 2,
   },
   {
     title: 'Wallets',
     url: '/dashboard/wallets',
     icon: Wallet,
+    index: 3,
   },
   {
     title: 'Settings',
     url: '/dashboard/settings',
     icon: Settings,
+    index: 4,
   },
 ]
 
@@ -60,11 +69,13 @@ const footerItems = [
     title: 'Help',
     url: '/help',
     icon: LucideHelpCircle,
+    index: 5,
   },
   {
     title: 'Logout',
     url: '/logout',
     icon: LogOut,
+    index: 6,
   },
 ]
 
@@ -76,6 +87,23 @@ const frameworks = [
 
 export function DashboardSidebar() {
   const pathname = useLocation().pathname
+  const linkRefs = useRef<Array<HTMLLIElement | null>>([])
+  useGSAP(() => {
+    gsap.fromTo(linkRefs.current,
+      {
+        autoAlpha: 0,
+        y: 20,
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.5,
+        ease: 'power2.out',
+        stagger: 0.1,
+      }
+    )
+
+  }, [])
   return (
     <Sidebar className='!border-r-0'>
       <SidebarHeader className='px-3'>
@@ -90,7 +118,11 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title}
+                  ref={
+                    (el) => (linkRefs.current[item.index] = el)
+                  }
+                >
                   <SidebarMenuButton
                     asChild
                     className={cn(
@@ -118,7 +150,11 @@ export function DashboardSidebar() {
       <SidebarFooter className='px-3'>
         <SidebarMenu>
           {footerItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem key={item.title}
+              ref={
+                (el) => (linkRefs.current[item.index] = el)
+              }
+            >
               <SidebarMenuButton
                 asChild
                 className={cn(
@@ -180,7 +216,7 @@ export const DashboardHeader = () => {
     <div className="flex items-center justify-between w-full mb-3">
       <div className="flex items-center justify-center">
         <SidebarTrigger />
-        <h3 className="text-base font-medium">{pageTitle}</h3>
+        <h3 className="text-base font-medium px-2">{pageTitle}</h3>
       </div>
 
       <div className="flex items-center gap-4">

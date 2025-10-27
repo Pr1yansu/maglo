@@ -106,6 +106,80 @@ export const animations = {
       })
     },
   },
+
+  // Route transitions
+  routeTransitions: {
+    // Slide transitions
+    slideLeft: {
+      enter: (element: Element | string) => {
+        return gsap.fromTo(
+          element,
+          { opacity: 0, xPercent: 100 },
+          { opacity: 1, xPercent: 0, duration: 0.5, ease: 'power3.out' }
+        )
+      },
+      exit: (element: Element | string) => {
+        return gsap.to(element, {
+          opacity: 0,
+          xPercent: -100,
+          duration: 0.3,
+          ease: 'power3.in',
+        })
+      },
+    },
+    slideRight: {
+      enter: (element: Element | string) => {
+        return gsap.fromTo(
+          element,
+          { opacity: 0, xPercent: -100 },
+          { opacity: 1, xPercent: 0, duration: 0.5, ease: 'power3.out' }
+        )
+      },
+      exit: (element: Element | string) => {
+        return gsap.to(element, {
+          opacity: 0,
+          xPercent: 100,
+          duration: 0.3,
+          ease: 'power3.in',
+        })
+      },
+    },
+    // Fade transitions
+    fade: {
+      enter: (element: Element | string) => {
+        return gsap.fromTo(
+          element,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.4, ease: 'power2.out' }
+        )
+      },
+      exit: (element: Element | string) => {
+        return gsap.to(element, {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+        })
+      },
+    },
+    // Scale transitions
+    scale: {
+      enter: (element: Element | string) => {
+        return gsap.fromTo(
+          element,
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+        )
+      },
+      exit: (element: Element | string) => {
+        return gsap.to(element, {
+          opacity: 0,
+          scale: 1.05,
+          duration: 0.3,
+          ease: 'power2.in',
+        })
+      },
+    },
+  },
 }
 
 // Utility functions
@@ -123,6 +197,35 @@ export const animationUtils = {
   // Create a timeline
   createTimeline: (config?: gsap.TimelineVars) => {
     return gsap.timeline(config)
+  },
+
+  // Transition utilities
+  transitionUtils: {
+    // Hide scrollbars
+    hideScrollbars: () => {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      document.body.classList.add('transitioning')
+    },
+
+    // Restore scrollbars
+    showScrollbars: () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      document.body.classList.remove('transitioning')
+    },
+
+    // Cleanup function for interrupted transitions
+    cleanup: (element: Element | string) => {
+      gsap.killTweensOf(element)
+      gsap.set(element, {
+        opacity: 1,
+        xPercent: 0,
+        x: 0,
+        scale: 1,
+        clearProps: 'all',
+      })
+    },
   },
 
   // Scroll-triggered animations

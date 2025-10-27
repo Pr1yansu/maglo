@@ -83,6 +83,53 @@
     h6 {
         @apply font-heading;
     }
+
+    /* Prevent scrollbar glitches during transitions */
+    .transition-container {
+        contain: layout style paint;
+        will-change: transform, opacity;
+        position: relative;
+        overflow: hidden !important;
+    }
+
+    /* Hide scrollbars during transitions */
+    .transitioning {
+        overflow: hidden !important;
+    }
+
+    .transitioning * {
+        overflow: hidden !important;
+    }
+
+    /* Smooth scrollbar appearance */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-background;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-border rounded-md;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted-foreground/50;
+    }
+
+    /* Prevent horizontal overflow during transitions */
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Ensure smooth transitions */
+    .transition-container>* {
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
 }
 
 
