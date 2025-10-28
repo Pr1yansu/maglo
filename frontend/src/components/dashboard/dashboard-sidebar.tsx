@@ -88,6 +88,14 @@ const frameworks = [
 export function DashboardSidebar() {
   const pathname = useLocation().pathname
   const linkRefs = useRef<Array<HTMLLIElement | null>>([])
+
+  const isActive = (currentPath: string, itemUrl: string) => {
+    if (currentPath === itemUrl) return true;
+    if (currentPath.startsWith(itemUrl + '/') && itemUrl !== '/dashboard') return true;
+
+    return false;
+  };
+
   useGSAP(() => {
     gsap.fromTo(linkRefs.current,
       {
@@ -130,7 +138,7 @@ export function DashboardSidebar() {
                       'text-zinc-700 dark:text-secondary-foreground',
                       'transition-all duration-300 ease-in-out',
                       'hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900',
-                      pathname === item.url &&
+                      isActive(pathname, item.url) &&
                       'bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm'
                     )}
                   >
@@ -162,7 +170,7 @@ export function DashboardSidebar() {
                   'text-zinc-700 dark:text-secondary-foreground',
                   'transition-all duration-300 ease-in-out',
                   'hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900',
-                  pathname === item.url &&
+                  isActive(pathname, item.url) &&
                   'bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm'
                 )}
               >

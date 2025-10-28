@@ -79,7 +79,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
                                         ? (group.options as ComboGroup[]).map((combo, i) => (
                                             <div key={`${group.groupLabel}-${i}`} className="flex flex-col gap-1">
                                                 <Combobox
-                                                    className="w-auto"
+                                                    className="w-[150px]"
                                                     data={combo.options}
                                                     name={`${combo.fieldLabel}`}
                                                     onChange={(value) =>
@@ -91,7 +91,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
                                         ))
                                         : (
                                             <Combobox
-                                                className="w-auto"
+                                                className="w-[150px]"
                                                 data={group.options as Filter[]}
                                                 name={group.groupLabel}
                                                 onChange={(value) => handleSelect(group.groupLabel, value)}

@@ -66,13 +66,17 @@ export const Combobox: React.FC<ComboboxProps> = ({
         >
           {selected ? (
             <div className="flex items-center gap-2">
-              <Image
-                src={selected.image || 'https://placehold.co/600x400'}
-                alt={selected.label}
-                width={20}
-                height={20}
-                className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
-              />
+              {
+                selected.image && (
+                  <Image
+                    src={selected.image || 'https://placehold.co/600x400'}
+                    alt={selected.label}
+                    width={20}
+                    height={20}
+                    className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
+                  />
+                )
+              }
               <p className="font-medium">{selected.label}</p>
             </div>
           ) : (

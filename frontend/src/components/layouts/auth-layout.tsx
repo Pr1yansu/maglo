@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useGSAP } from '@gsap/react';
+
 import Image from '@/components/ui/image';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import GoogleIcon from '@/components/assets/google';
+import FacebookIcon from '@/components/assets/facebook';
 
 const AuthLayout = () => {
     const pathname = useLocation().pathname;
@@ -56,7 +59,7 @@ const AuthLayout = () => {
                 {/* Left Container */}
                 <div
                     ref={leftContainer}
-                    className="flex justify-center items-center w-full h-full bg-background z-10"
+                    className="flex justify-center items-center w-full h-full bg-background z-10 px-4"
                 >
                     <div className="flex flex-col justify-between h-full">
                         <div className="pointer-events-none" />
@@ -82,10 +85,12 @@ const AuthLayout = () => {
                             </div>
                             <Separator label="or" className="my-4" />
                             <div className="space-y-4">
-                                <Button variant="secondary" className="w-full">
+                                <Button variant="outline" className="w-full">
+                                    <GoogleIcon />
                                     Continue with Google
                                 </Button>
-                                <Button variant="secondary" className="w-full">
+                                <Button variant="outline" className="w-full">
+                                    <FacebookIcon />
                                     Continue with Facebook
                                 </Button>
                             </div>
@@ -117,7 +122,7 @@ const AuthLayout = () => {
                 {/* Right Container (Image) */}
                 <div
                     ref={rightContainer}
-                    className="relative hidden md:block rounded-md overflow-hidden"
+                    className="relative hidden md:block rounded-md overflow-hidden px-4"
                 >
                     <Image
                         src="https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?auto=format&fit=crop&q=80&w=1169"

@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-// 🔹 Zod Schema for validation
 const registerSchema = z
     .object({
         name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -44,7 +43,6 @@ const Register = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {/* Name */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -59,7 +57,6 @@ const Register = () => {
                     )}
                 />
 
-                {/* Email */}
                 <FormField
                     control={form.control}
                     name="email"
@@ -74,7 +71,6 @@ const Register = () => {
                     )}
                 />
 
-                {/* Password */}
                 <FormField
                     control={form.control}
                     name="password"
