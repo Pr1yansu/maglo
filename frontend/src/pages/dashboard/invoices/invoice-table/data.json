@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1",
+    "client": {
+      "name": "John Doe",
+      "invoiceNumber": "INV-100123",
+      "profilePicture": "https://randomuser.me/api/portraits/men/32.jpg",
+      "email": "john.doe@example.com"
+    },
+    "createdAt": "2025-10-10T12:00:00Z",
+    "orders": 5,
+    "type": "Service",
+    "amount": 1250.5,
+    "status": "Paid"
+  },
+  {
+    "id": "2",
+    "client": {
+      "name": "Sarah Williams",
+      "invoiceNumber": "INV-100124",
+      "profilePicture": "https://randomuser.me/api/portraits/women/44.jpg",
+      "email": "sarah.williams@example.com"
+    },
+    "createdAt": "2025-09-22T09:30:00Z",
+    "orders": 3,
+    "type": "Product",
+    "amount": 940.75,
+    "status": "Pending"
+  },
+  {
+    "id": "3",
+    "client": {
+      "name": "Michael Chen",
+      "invoiceNumber": "INV-100125",
+      "profilePicture": "https://randomuser.me/api/portraits/men/15.jpg",
+      "email": "michael.chen@example.com"
+    },
+    "createdAt": "2025-08-15T15:45:00Z",
+    "orders": 7,
+    "type": "Consulting",
+    "amount": 2130,
+    "status": "Paid"
+  },
+  {
+    "id": "4",
+    "client": {
+      "name": "Emily Davis",
+      "invoiceNumber": "INV-100126",
+      "profilePicture": "https://randomuser.me/api/portraits/women/68.jpg",
+      "email": "emily.davis@example.com"
+    },
+    "createdAt": "2025-07-30T11:20:00Z",
+    "orders": 2,
+    "type": "Subscription",
+    "amount": 499.99,
+    "status": "Overdue"
+  },
+  {
+    "id": "5",
+    "client": {
+      "name": "Carlos Martinez",
+      "invoiceNumber": "INV-100127",
+      "profilePicture": "https://randomuser.me/api/portraits/men/19.jpg",
+      "email": "carlos.martinez@example.com"
+    },
+    "createdAt": "2025-10-01T14:10:00Z",
+    "orders": 4,
+    "type": "Maintenance",
+    "amount": 750,
+    "status": "Pending"
+  }
+]

@@ -113,15 +113,15 @@ export function DashboardSidebar() {
 
   }, [])
   return (
-    <Sidebar className='!border-r-0'>
-      <SidebarHeader className='px-3'>
+    <Sidebar className='!border-r-0' collapsible='icon'>
+      <SidebarHeader className='px-3 group-data-[collapsible=icon]:px-0'>
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-3 text-sm font-semibold dark:text-white">
             Maglo
           </SidebarGroupLabel>
         </SidebarGroup>
       </SidebarHeader>
-      <SidebarContent className='px-3'>
+      <SidebarContent className='px-3 group-data-[collapsible=icon]:px-0'>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -155,7 +155,7 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className='px-3'>
+      <SidebarFooter className='px-3 group-data-[collapsible=icon]:px-2'>
         <SidebarMenu>
           {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}

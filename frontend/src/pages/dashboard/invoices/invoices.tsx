@@ -1,8 +1,13 @@
 import { Button } from '@/components/ui/button'
+import { DataTable } from '@/components/ui/data-table'
 import FilterButton from '@/components/ui/filter-button'
 import SearchBox from '@/components/ui/search-box'
 import { BanknoteArrowUpIcon, Filter } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useMemo } from 'react'
+import { columns, type Invoices as Invoice } from '@/pages/dashboard/invoices/invoice-table/columns'
+import rawData from '@/pages/dashboard/invoices/invoice-table/data.json'
+
 
 const filters = [
     {
@@ -44,15 +49,34 @@ const generateRandomInvoiceNumber = () => {
 
 const Invoices = () => {
     const navigate = useNavigate()
-    const handleApplyFilters = (filters: Record<string, string | null>) => {
-        console.log('Applied Filters:', filters)
-        // Here you can trigger API calls or local filtering logic
+    const [params, setParams] = useSearchParams()
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value
+        const next = new URLSearchParams(params)
+        if (query) next.set('search', query)
+        else next.delete('search')
+        setParams(next, { replace: true })
     }
+
+    type InvoiceJson = Omit<Invoice, 'createdAt'> & { createdAt: string }
+
+    const data: Invoice[] = useMemo(() => (
+        (rawData as InvoiceJson[]).map((item) => ({
+            ...item,
+            createdAt: new Date(item.createdAt),
+        }))
+    ), [])
+
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
-                <SearchBox placeholder="Search Invoices" />
+            <div className="flex justify-between items-center mb-4 flex-wrap">
+                <SearchBox
+                    placeholder="Search Invoices"
+                    value={params.get('search') || ''}
+                    onChange={handleChange}
+                />
                 <div className="flex items-center gap-4">
                     <Button size={"sm"} onClick={() => navigate('/dashboard/invoices/new?invoiceNumber=' + generateRandomInvoiceNumber())}>
                         <BanknoteArrowUpIcon className="mr-2" />
@@ -60,7 +84,13 @@ const Invoices = () => {
                     </Button>
 
                     <FilterButton
-                        onApply={(filters) => console.log('Applied Filters:', filters)}
+                        onApply={(filters) => {
+                            const next = new URLSearchParams(params)
+                            const status = (filters?.Status || filters?.status) as string | null
+                            if (status) next.set('status', status)
+                            else next.delete('status')
+                            setParams(next, { replace: true })
+                        }}
                         filters={filters}
                     >
                         <Filter />
@@ -68,6 +98,24 @@ const Invoices = () => {
                     </FilterButton>
                 </div>
             </div>
+            <DataTable
+                columns={columns}
+                data={data}
+                searchConfig={{
+                    enabled: true,
+                    useUrlParams: true,
+                    paramNames: { query: 'search', status: 'status' },
+                    getFields: (row: Invoice) => ({
+                        name: row.client.name,
+                        invoiceNumber: row.client.invoiceNumber,
+                        email: row.client.email,
+                        type: row.type,
+                        status: row.status,
+                    }),
+                    weights: { name: 3, invoiceNumber: 2, email: 2, type: 1, status: 1 },
+                    statusFieldKey: 'status',
+                }}
+            />
         </div>
     )
 }
