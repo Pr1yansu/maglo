@@ -1,3 +1,8 @@
+import { formatDate } from 'date-fns'
+import { Ellipsis } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
     DropdownMenu,
@@ -7,12 +12,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Badge } from '@/components/ui/badge'
+import { Checkbox } from "@/components/ui/checkbox"
 import { formatCurrency } from '@/lib/utils'
-import { ColumnDef } from '@tanstack/react-table'
-import { formatDate } from 'date-fns'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Ellipsis } from 'lucide-react'
 
 export type Invoices = {
     id: string
@@ -30,6 +31,26 @@ export type Invoices = {
 }
 
 export const columns: ColumnDef<Invoices>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+    },
     {
         header: 'Name/Client',
         cell: ({ row }) => {

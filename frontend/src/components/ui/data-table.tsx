@@ -4,7 +4,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { buildIndex, filterAndRank, DEFAULT_SYNONYMS } from "@/lib/search"
 import {
@@ -30,12 +30,16 @@ interface DataTableProps<TData, TValue> {
         synonyms?: Record<string, string[]>
         statusFieldKey?: string
     }
+    onSelectionChange?: (rows: TData[]) => void
+    clearSelectionOnDataChange?: boolean
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     searchConfig,
+    onSelectionChange,
+    clearSelectionOnDataChange = true,
 }: DataTableProps<TData, TValue>) {
     const [params] = useSearchParams()
     const enabled = !!searchConfig?.enabled && !!searchConfig.getFields
@@ -66,11 +70,28 @@ export function DataTable<TData, TValue>({
         })
     }, [index, query, status, enabled])
 
+    const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({})
+
+    useEffect(() => {
+        if (clearSelectionOnDataChange) setRowSelection({})
+    }, [finalData])
+
     const table = useReactTable({
         data: finalData,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getRowId: (row: any, index) => (row?.id != null ? String(row.id) : String(index)),
+        onRowSelectionChange: setRowSelection,
+        state: { rowSelection },
     })
+
+    // Notify parent when selection changes
+    useEffect(() => {
+        if (!onSelectionChange) return
+        const rows = table.getSelectedRowModel().rows.map((r) => r.original as TData)
+        onSelectionChange(rows)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rowSelection])
 
     return (
         <div className="w-full overflow-x-auto rounded-md border">

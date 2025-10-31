@@ -1,10 +1,11 @@
+import { useMemo, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/ui/data-table'
 import FilterButton from '@/components/ui/filter-button'
 import SearchBox from '@/components/ui/search-box'
 import { BanknoteArrowUpIcon, Filter } from 'lucide-react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMemo } from 'react'
 import { columns, type Invoices as Invoice } from '@/pages/dashboard/invoices/invoice-table/columns'
 import rawData from '@/pages/dashboard/invoices/invoice-table/data.json'
 
@@ -61,12 +62,14 @@ const Invoices = () => {
 
     type InvoiceJson = Omit<Invoice, 'createdAt'> & { createdAt: string }
 
-    const data: Invoice[] = useMemo(() => (
+    const rows = useMemo<Invoice[]>(() => (
         (rawData as InvoiceJson[]).map((item) => ({
             ...item,
             createdAt: new Date(item.createdAt),
         }))
     ), [])
+
+    const [selected, setSelected] = useState<Invoice[]>([])
 
 
     return (
@@ -78,10 +81,24 @@ const Invoices = () => {
                     onChange={handleChange}
                 />
                 <div className="flex items-center gap-4">
-                    <Button size={"sm"} onClick={() => navigate('/dashboard/invoices/new?invoiceNumber=' + generateRandomInvoiceNumber())}>
-                        <BanknoteArrowUpIcon className="mr-2" />
-                        New Invoice
-                    </Button>
+                    {selected.length > 0 ? (
+                        <Button
+                            size={"sm"}
+                            variant="destructive"
+                            onClick={() => {
+                                // Log the rows that would be deleted; do not mutate data
+                                // You can replace this with an API call or confirmation later
+                                console.log('Invoices to delete:', selected)
+                            }}
+                        >
+                            Delete {selected.length} {selected.length === 1 ? 'invoice' : 'invoices'}
+                        </Button>
+                    ) : (
+                        <Button size={"sm"} onClick={() => navigate('/dashboard/invoices/new?invoiceNumber=' + generateRandomInvoiceNumber())}>
+                            <BanknoteArrowUpIcon className="mr-2" />
+                            New Invoice
+                        </Button>
+                    )}
 
                     <FilterButton
                         onApply={(filters) => {
@@ -100,7 +117,7 @@ const Invoices = () => {
             </div>
             <DataTable
                 columns={columns}
-                data={data}
+                data={rows}
                 searchConfig={{
                     enabled: true,
                     useUrlParams: true,
@@ -115,6 +132,7 @@ const Invoices = () => {
                     weights: { name: 3, invoiceNumber: 2, email: 2, type: 1, status: 1 },
                     statusFieldKey: 'status',
                 }}
+                onSelectionChange={setSelected}
             />
         </div>
     )
