@@ -1,11 +1,11 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const isAuthenticated = true
+  const isAuthenticated = true;
 
   // Boolean(localStorage.getItem("authToken"));
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />
-}
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;

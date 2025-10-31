@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -11,26 +11,26 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import Image from '@/components/ui/image'
+} from "@/components/ui/popover";
+import Image from "@/components/ui/image";
 
 interface ComboboxOption {
-  label: string
-  value: string
-  image?: string
+  label: string;
+  value: string;
+  image?: string;
 }
 
 interface ComboboxProps {
-  data: ComboboxOption[]
-  name?: string
-  className?: string
-  onChange?: (value: string | null) => void
-  value?: string | null
+  data: ComboboxOption[];
+  name?: string;
+  className?: string;
+  onChange?: (value: string | null) => void;
+  value?: string | null;
 }
 
 export const Combobox: React.FC<ComboboxProps> = ({
@@ -40,20 +40,20 @@ export const Combobox: React.FC<ComboboxProps> = ({
   onChange,
   value: controlledValue,
 }) => {
-  const [open, setOpen] = React.useState(false)
-  const [internalValue, setInternalValue] = React.useState('')
+  const [open, setOpen] = React.useState(false);
+  const [internalValue, setInternalValue] = React.useState("");
 
   // If parent passes a controlled value, use that
-  const value = controlledValue ?? internalValue
+  const value = controlledValue ?? internalValue;
 
   const handleSelect = (currentValue: string) => {
-    const newValue = currentValue === value ? '' : currentValue
-    setInternalValue(newValue)
-    onChange?.(newValue || null)
-    setOpen(false)
-  }
+    const newValue = currentValue === value ? "" : currentValue;
+    setInternalValue(newValue);
+    onChange?.(newValue || null);
+    setOpen(false);
+  };
 
-  const selected = data.find((item) => item.value === value)
+  const selected = data.find((item) => item.value === value);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -66,17 +66,15 @@ export const Combobox: React.FC<ComboboxProps> = ({
         >
           {selected ? (
             <div className="flex items-center gap-2">
-              {
-                selected.image && (
-                  <Image
-                    src={selected.image || 'https://placehold.co/600x400'}
-                    alt={selected.label}
-                    width={20}
-                    height={20}
-                    className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
-                  />
-                )
-              }
+              {selected.image && (
+                <Image
+                  src={selected.image || "https://placehold.co/600x400"}
+                  alt={selected.label}
+                  width={20}
+                  height={20}
+                  className="inline-block mr-2 rounded-full w-5 h-5 object-cover"
+                />
+              )}
               <p className="font-medium">{selected.label}</p>
             </div>
           ) : (
@@ -99,7 +97,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
                   onSelect={() => handleSelect(option.value)}
                 >
                   <Image
-                    src={option.image || 'https://placehold.co/600x400'}
+                    src={option.image || "https://placehold.co/600x400"}
                     alt={option.label}
                     width={20}
                     height={20}
@@ -108,8 +106,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
                   <p className="font-medium">{option.label}</p>
                   <Check
                     className={cn(
-                      'ml-auto',
-                      value === option.value ? 'opacity-100' : 'opacity-0'
+                      "ml-auto",
+                      value === option.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>
@@ -119,5 +117,5 @@ export const Combobox: React.FC<ComboboxProps> = ({
         </Command>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
