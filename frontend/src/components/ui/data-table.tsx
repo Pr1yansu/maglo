@@ -85,7 +85,6 @@ export function DataTable<TData, TValue>({
         state: { rowSelection },
     })
 
-    // Notify parent when selection changes
     useEffect(() => {
         if (!onSelectionChange) return
         const rows = table.getSelectedRowModel().rows.map((r) => r.original as TData)
