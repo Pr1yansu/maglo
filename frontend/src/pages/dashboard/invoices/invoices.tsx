@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import FilterButton from "@/components/ui/filter-button";
 import SearchBox from "@/components/ui/search-box";
-import { BanknoteArrowUpIcon, Filter } from "lucide-react";
 import {
   columns,
   type Invoices as Invoice,
 } from "@/pages/dashboard/invoices/invoice-table/columns";
+import { BanknoteArrowUpIcon, Filter } from "lucide-react";
 import rawData from "@/pages/dashboard/invoices/invoice-table/data.json";
 
 const filters = [
@@ -70,7 +70,7 @@ const Invoices = () => {
         ...item,
         createdAt: new Date(item.createdAt),
       })),
-    [],
+    []
   );
 
   const [selected, setSelected] = useState<Invoice[]>([]);
@@ -89,8 +89,6 @@ const Invoices = () => {
               size={"sm"}
               variant="destructive"
               onClick={() => {
-                // Log the rows that would be deleted; do not mutate data
-                // You can replace this with an API call or confirmation later
                 console.log("Invoices to delete:", selected);
               }}
             >
@@ -103,7 +101,7 @@ const Invoices = () => {
               onClick={() =>
                 navigate(
                   "/dashboard/invoices/new?invoiceNumber=" +
-                    generateRandomInvoiceNumber(),
+                    generateRandomInvoiceNumber()
                 )
               }
             >

@@ -16,9 +16,9 @@ const Dashboard = lazy(() => import("./pages/dashboard/dashboard"));
 const Transactions = lazy(() => import("./pages/dashboard/transaction"));
 const Invoices = lazy(() => import("./pages/dashboard/invoices/invoices"));
 const CreateInvoice = lazy(
-  () => import("./pages/dashboard/invoices/new-invoice"),
+  () => import("./pages/dashboard/invoices/new-invoice")
 );
-const Wallets = lazy(() => import("./pages/dashboard/wallets"));
+const Wallets = lazy(() => import("./pages/dashboard/wallets/wallets"));
 const DashboardSettings = lazy(() => import("./pages/dashboard/settings"));
 const NotFound = lazy(() => import("../src/pages/not-found"));
 

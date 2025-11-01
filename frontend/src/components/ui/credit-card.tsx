@@ -33,7 +33,7 @@ interface CreditCardComponentProps {
   onFlip?: (flipped: boolean) => void;
 }
 
-export default function CreditCardComponent({
+export default function CreditCard({
   card,
   className,
   isFlipped = false,
@@ -55,7 +55,7 @@ export default function CreditCardComponent({
     const masked = digits
       .split("")
       .map((ch: string, idx: number) =>
-        idx < digits.length - 4 && /\d/.test(ch) ? "•" : ch,
+        idx < digits.length - 4 && /\d/.test(ch) ? "•" : ch
       )
       .join("")
       .replace(/(.{4})/g, "$1 ")
@@ -99,23 +99,31 @@ export default function CreditCardComponent({
         return (
           <div className="flex items-center gap-1">
             <span className="relative inline-flex">
-              <span className="w-6 h-6 rounded-full bg-red-500/90" />
-              <span className="w-6 h-6 rounded-full bg-orange-400/90 -ml-3 mix-blend-screen" />
+              <span className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-red-500/90" />
+              <span className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-orange-400/90 -ml-2 sm:-ml-3 mix-blend-screen" />
             </span>
           </div>
         );
       case "amex":
-        return <div className="text-sm font-black tracking-wider">AMEX</div>;
+        return (
+          <div className="text-xs sm:text-sm font-black tracking-wider">
+            AMEX
+          </div>
+        );
       case "discover":
         return (
-          <div className="text-sm font-bold tracking-wider">
+          <div className="text-xs sm:text-sm font-bold tracking-wider">
             <span className="text-white">DISC</span>
             <span className="text-amber-300">OVER</span>
           </div>
         );
       case "visa":
       default:
-        return <div className="text-xl font-black tracking-wide">VISA</div>;
+        return (
+          <div className="text-lg sm:text-xl font-black tracking-wide">
+            VISA
+          </div>
+        );
     }
   };
 
@@ -123,7 +131,7 @@ export default function CreditCardComponent({
     <div
       className={cn(
         "relative w-full aspect-video cursor-pointer perspective border-0 outline-none",
-        className,
+        className
       )}
       onClick={handleFlip}
       role="button"
@@ -141,45 +149,57 @@ export default function CreditCardComponent({
       >
         <div
           className={cn(
-            "absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-br",
+            "absolute inset-0 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br",
             gradientClass,
-            "p-6 text-white shadow-xl",
+            "p-3 sm:p-4 md:p-6 text-white shadow-xl",
             "flex flex-col justify-between",
-            "backface-hidden",
+            "backface-hidden"
           )}
         >
           <div className="absolute inset-0">
-            <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -top-6 sm:-top-10 -right-6 sm:-right-10 w-32 sm:w-56 h-32 sm:h-56 rounded-full bg-white/10 blur-2xl sm:blur-3xl" />
+            <div className="absolute -bottom-8 sm:-bottom-16 -left-6 sm:-left-10 w-40 sm:w-72 h-40 sm:h-72 rounded-full bg-white/10 blur-2xl sm:blur-3xl" />
             <div className="absolute inset-0 opacity-20 card-dots-overlay" />
           </div>
 
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="flex justify-between items-start">
-              <div className="flex flex-col gap-1">
-                <div className="text-[10px] uppercase tracking-wider opacity-80">
+              <div className="flex flex-col gap-0.5 sm:gap-1">
+                <div className="text-[8px] sm:text-[10px] uppercase tracking-wider opacity-80">
                   {card.cardType ? card.cardType : brand}
                 </div>
-                <div className="text-lg font-semibold">{cardName}</div>
+                <div className="text-sm sm:text-lg font-semibold">
+                  {cardName}
+                </div>
               </div>
-              <BrandLogo />
+              <div className="scale-75 sm:scale-100 origin-top-right">
+                <BrandLogo />
+              </div>
             </div>
 
             <div>
-              <div className="text-xs opacity-80 mb-2">Card Number</div>
-              <div className="text-xl font-mono tracking-widest">
+              <div className="text-[10px] sm:text-xs opacity-80 mb-1 sm:mb-2">
+                Card Number
+              </div>
+              <div className="text-sm sm:text-xl font-mono tracking-wider sm:tracking-widest">
                 {maskedCardNumber}
               </div>
             </div>
 
             <div className="flex justify-between items-end">
               <div>
-                <div className="text-xs opacity-80 mb-1">Card Holder</div>
-                <div className="text-sm font-semibold">{cardholderName}</div>
+                <div className="text-[10px] sm:text-xs opacity-80 mb-0.5 sm:mb-1">
+                  Card Holder
+                </div>
+                <div className="text-xs sm:text-sm font-semibold">
+                  {cardholderName}
+                </div>
               </div>
               <div>
-                <div className="text-xs opacity-80 mb-1">Expires</div>
-                <div className="text-sm font-mono">{expiryDate}</div>
+                <div className="text-[10px] sm:text-xs opacity-80 mb-0.5 sm:mb-1">
+                  Expires
+                </div>
+                <div className="text-xs sm:text-sm font-mono">{expiryDate}</div>
               </div>
             </div>
           </div>
@@ -187,37 +207,41 @@ export default function CreditCardComponent({
 
         <div
           className={cn(
-            "absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-br",
+            "absolute inset-0 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br",
             gradientClass,
-            "p-6 text-white shadow-xl",
+            "p-3 sm:p-4 md:p-6 text-white shadow-xl",
             "flex flex-col justify-center items-center",
-            "backface-hidden rotate-y-180",
+            "backface-hidden rotate-y-180"
           )}
         >
           <div className="absolute inset-0">
-            <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -top-6 sm:-top-10 -right-6 sm:-right-10 w-32 sm:w-56 h-32 sm:h-56 rounded-full bg-white/10 blur-2xl sm:blur-3xl" />
+            <div className="absolute -bottom-8 sm:-bottom-16 -left-6 sm:-left-10 w-40 sm:w-72 h-40 sm:h-72 rounded-full bg-white/10 blur-2xl sm:blur-3xl" />
           </div>
 
           <div className="relative z-10 w-full">
-            <div className="mb-8">
-              <div className="bg-black/40 h-12 rounded mb-4" />
-              <p className="text-xs text-center opacity-70">
+            <div className="mb-4 sm:mb-8">
+              <div className="bg-black/40 h-8 sm:h-12 rounded mb-2 sm:mb-4" />
+              <p className="text-[10px] sm:text-xs text-center opacity-70">
                 Authorized Signature
               </p>
-              <div className="mt-2 border-b border-white/30" />
+              <div className="mt-1 sm:mt-2 border-b border-white/30" />
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded p-4 text-center">
-              <p className="text-xs opacity-70 mb-2">Security Code</p>
-              <p className="text-2xl font-mono tracking-widest">{cvv}</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded p-2 sm:p-4 text-center">
+              <p className="text-[10px] sm:text-xs opacity-70 mb-1 sm:mb-2">
+                Security Code
+              </p>
+              <p className="text-lg sm:text-2xl font-mono tracking-widest">
+                {cvv}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Flip hint */}
-      <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute -bottom-4 sm:-bottom-6 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
         Click to flip
       </div>
     </div>

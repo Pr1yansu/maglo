@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="p-5 w-full overflow-x-auto">
+      <main className="p-5 w-full overflow-x-auto h-screen">
         <DashboardHeader />
         <Outlet />
       </main>
