@@ -13,7 +13,9 @@ const Home = lazy(() => import("../src/pages/home"));
 const Login = lazy(() => import("../src/pages/login"));
 const Register = lazy(() => import("../src/pages/register"));
 const Dashboard = lazy(() => import("./pages/dashboard/dashboard"));
-const Transactions = lazy(() => import("./pages/dashboard/transaction"));
+const Transactions = lazy(
+  () => import("./pages/dashboard/transaction/transaction")
+);
 const Invoices = lazy(() => import("./pages/dashboard/invoices/invoices"));
 const CreateInvoice = lazy(
   () => import("./pages/dashboard/invoices/new-invoice")

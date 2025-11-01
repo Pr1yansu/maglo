@@ -66,7 +66,7 @@ export type IndexedRow<T> = {
 
 export function buildIndex<T>(
   rows: T[],
-  getFields: (row: T) => Record<string, string>,
+  getFields: (row: T) => Record<string, string>
 ): IndexedRow<T>[] {
   return rows.map((row) => {
     const raw = getFields(row);
@@ -84,8 +84,8 @@ export function filterAndRank<T>(
     synonyms?: SynonymMap;
     weights?: Record<string, number>;
     status?: string;
-    statusFieldKey?: string; // which key from getFields() represents status
-  },
+    statusFieldKey?: string;
+  }
 ): T[] {
   const synonyms = opts?.synonyms ?? DEFAULT_SYNONYMS;
   const q = normalize(query || "");
@@ -94,7 +94,7 @@ export function filterAndRank<T>(
   let items = index;
   if (statusNorm && opts?.statusFieldKey) {
     items = items.filter((it) =>
-      it.fields[opts.statusFieldKey!]?.includes(statusNorm),
+      it.fields[opts.statusFieldKey!]?.includes(statusNorm)
     );
   }
 

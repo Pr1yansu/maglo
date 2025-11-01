@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "product": {
+      "name": "Netflix Subscription",
+      "image": "https://logo.clearbit.com/netflix.com",
+      "email": "billing@netflix.com",
+      "siteUrl": "netflix.com"
+    },
+    "type": "Subscription",
+    "amount": 15.99,
+    "createdAt": "2025-10-25T14:30:00Z",
+    "invoiceID": "TXN-100001",
+    "status": "completed"
+  },
+  {
+    "id": "2",
+    "product": {
+      "name": "Spotify Premium",
+      "image": "https://logo.clearbit.com/spotify.com",
+      "email": "support@spotify.com",
+      "siteUrl": "spotify.com"
+    },
+    "type": "Subscription",
+    "amount": 9.99,
+    "createdAt": "2025-10-24T09:15:00Z",
+    "invoiceID": "TXN-100002",
+    "status": "completed"
+  },
+  {
+    "id": "3",
+    "product": {
+      "name": "Amazon Prime",
+      "image": "https://logo.clearbit.com/amazon.com",
+      "email": "prime@amazon.com",
+      "siteUrl": "amazon.com"
+    },
+    "type": "Subscription",
+    "amount": 14.99,
+    "createdAt": "2025-10-23T16:45:00Z",
+    "invoiceID": "TXN-100003",
+    "status": "pending"
+  },
+  {
+    "id": "4",
+    "product": {
+      "name": "Adobe Creative Cloud",
+      "image": "https://logo.clearbit.com/adobe.com",
+      "email": "billing@adobe.com",
+      "siteUrl": "adobe.com"
+    },
+    "type": "Software",
+    "amount": 52.99,
+    "createdAt": "2025-10-22T11:20:00Z",
+    "invoiceID": "TXN-100004",
+    "status": "completed"
+  },
+  {
+    "id": "5",
+    "product": {
+      "name": "GitHub Pro",
+      "image": "https://logo.clearbit.com/github.com",
+      "email": "support@github.com",
+      "siteUrl": "github.com"
+    },
+    "type": "Software",
+    "amount": 4.0,
+    "createdAt": "2025-10-21T13:10:00Z",
+    "invoiceID": "TXN-100005",
+    "status": "failed"
+  },
+  {
+    "id": "6",
+    "product": {
+      "name": "Uber Ride",
+      "image": "https://logo.clearbit.com/uber.com",
+      "email": "receipts@uber.com",
+      "siteUrl": "uber.com"
+    },
+    "type": "Transport",
+    "amount": 23.75,
+    "createdAt": "2025-10-20T19:30:00Z",
+    "invoiceID": "TXN-100006",
+    "status": "completed"
+  },
+  {
+    "id": "7",
+    "product": {
+      "name": "Starbucks Coffee",
+      "image": "https://logo.clearbit.com/starbucks.com",
+      "email": "customerservice@starbucks.com",
+      "siteUrl": "starbucks.com"
+    },
+    "type": "Food & Beverage",
+    "amount": 8.45,
+    "createdAt": "2025-10-20T08:15:00Z",
+    "invoiceID": "TXN-100007",
+    "status": "completed"
+  },
+  {
+    "id": "8",
+    "product": {
+      "name": "Microsoft Office 365",
+      "image": "https://logo.clearbit.com/microsoft.com",
+      "email": "billing@microsoft.com",
+      "siteUrl": "microsoft.com"
+    },
+    "type": "Software",
+    "amount": 12.99,
+    "createdAt": "2025-10-19T10:45:00Z",
+    "invoiceID": "TXN-100008",
+    "status": "pending"
+  },
+  {
+    "id": "9",
+    "product": {
+      "name": "DoorDash Delivery",
+      "image": "https://logo.clearbit.com/doordash.com",
+      "email": "support@doordash.com",
+      "siteUrl": "doordash.com"
+    },
+    "type": "Food & Beverage",
+    "amount": 34.5,
+    "createdAt": "2025-10-18T20:00:00Z",
+    "invoiceID": "TXN-100009",
+    "status": "completed"
+  },
+  {
+    "id": "10",
+    "product": {
+      "name": "Apple iCloud Storage",
+      "image": "https://logo.clearbit.com/apple.com",
+      "email": "billing@apple.com",
+      "siteUrl": "apple.com"
+    },
+    "type": "Storage",
+    "amount": 2.99,
+    "createdAt": "2025-10-18T12:30:00Z",
+    "invoiceID": "TXN-100010",
+    "status": "completed"
+  }
+]

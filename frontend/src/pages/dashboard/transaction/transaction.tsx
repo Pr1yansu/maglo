@@ -7,50 +7,52 @@ import FilterButton from "@/components/ui/filter-button";
 import SearchBox from "@/components/ui/search-box";
 import {
   columns,
-  type Invoices as Invoice,
-} from "@/pages/dashboard/invoices/invoice-table/columns";
-import { BanknoteArrowUpIcon, Filter } from "lucide-react";
-import rawData from "@/pages/dashboard/invoices/invoice-table/data.json";
+  type Transactions as Transaction,
+} from "@/pages/dashboard/transaction/transaction-table/columns";
+import { CreditCard, Filter } from "lucide-react";
+import rawData from "@/pages/dashboard/transaction/transaction-table/data.json";
 
 const filters = [
   {
-    groupLabel: "Invoice Filters",
+    groupLabel: "Transaction Filters",
     options: [
       {
         fieldLabel: "Status",
         options: [
-          { label: "Paid", value: "paid" },
+          { label: "Completed", value: "completed" },
           { label: "Pending", value: "pending" },
-          { label: "Overdue", value: "overdue" },
+          { label: "Failed", value: "failed" },
         ],
       },
       {
-        fieldLabel: "Month",
+        fieldLabel: "Type",
         options: [
-          { label: "January", value: "jan" },
-          { label: "February", value: "feb" },
-          { label: "March", value: "mar" },
+          { label: "Subscription", value: "subscription" },
+          { label: "Software", value: "software" },
+          { label: "Transport", value: "transport" },
+          { label: "Food & Beverage", value: "food" },
+          { label: "Storage", value: "storage" },
         ],
       },
     ],
   },
   {
-    groupLabel: "Payment Method",
+    groupLabel: "Amount Range",
     options: [
-      { label: "Cash", value: "cash" },
-      { label: "Card", value: "card" },
-      { label: "UPI", value: "upi" },
+      { label: "Under $10", value: "under10" },
+      { label: "$10 - $50", value: "10to50" },
+      { label: "Over $50", value: "over50" },
     ],
   },
 ];
 
-const generateRandomInvoiceNumber = () => {
-  const prefix = "INV-";
+const generateRandomTransactionID = () => {
+  const prefix = "TXN-";
   const randomNumber = Math.floor(100000 + Math.random() * 900000);
   return `${prefix}${randomNumber}`;
 };
 
-const Invoices = () => {
+const Transaction = () => {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(params.get("search") || "");
@@ -70,24 +72,24 @@ const Invoices = () => {
     setParams(next, { replace: true });
   };
 
-  type InvoiceJson = Omit<Invoice, "createdAt"> & { createdAt: string };
+  type TransactionJson = Omit<Transaction, "createdAt"> & { createdAt: string };
 
-  const rows = useMemo<Invoice[]>(
+  const rows = useMemo<Transaction[]>(
     () =>
-      (rawData as InvoiceJson[]).map((item) => ({
+      (rawData as TransactionJson[]).map((item) => ({
         ...item,
         createdAt: new Date(item.createdAt),
       })),
     []
   );
 
-  const [selected, setSelected] = useState<Invoice[]>([]);
+  const [selected, setSelected] = useState<Transaction[]>([]);
 
   return (
     <div>
       <div className="flex justify-between items-center mb-4 flex-wrap">
         <SearchBox
-          placeholder="Search Invoices"
+          placeholder="Search Transactions"
           value={searchValue}
           onChange={handleChange}
         />
@@ -97,24 +99,24 @@ const Invoices = () => {
               size={"sm"}
               variant="destructive"
               onClick={() => {
-                console.log("Invoices to delete:", selected);
+                console.log("Transactions to delete:", selected);
               }}
             >
               Delete {selected.length}{" "}
-              {selected.length === 1 ? "invoice" : "invoices"}
+              {selected.length === 1 ? "transaction" : "transactions"}
             </Button>
           ) : (
             <Button
               size={"sm"}
               onClick={() =>
                 navigate(
-                  "/dashboard/invoices/new?invoiceNumber=" +
-                    generateRandomInvoiceNumber()
+                  "/dashboard/transactions/new?transactionID=" +
+                    generateRandomTransactionID()
                 )
               }
             >
-              <BanknoteArrowUpIcon className="mr-2" />
-              New Invoice
+              <CreditCard className="mr-2" />
+              New Transaction
             </Button>
           )}
 
@@ -124,8 +126,11 @@ const Invoices = () => {
               const status = (filters?.Status || filters?.status) as
                 | string
                 | null;
+              const type = (filters?.Type || filters?.type) as string | null;
               if (status) next.set("status", status);
               else next.delete("status");
+              if (type) next.set("type", type);
+              else next.delete("type");
               setParams(next, { replace: true });
             }}
             filters={filters}
@@ -142,14 +147,14 @@ const Invoices = () => {
           enabled: true,
           useUrlParams: true,
           paramNames: { query: "search", status: "status" },
-          getFields: (row: Invoice) => ({
-            name: row.client.name,
-            invoiceNumber: row.client.invoiceNumber,
-            email: row.client.email,
+          getFields: (row: Transaction) => ({
+            name: row.product.name,
+            email: row.product.email,
             type: row.type,
-            status: row.status,
+            invoiceID: row.invoiceID,
+            status: row.status || "completed",
           }),
-          weights: { name: 3, invoiceNumber: 2, email: 2, type: 1, status: 1 },
+          weights: { name: 3, invoiceID: 2, email: 2, type: 1, status: 1 },
           statusFieldKey: "status",
         }}
         onSelectionChange={setSelected}
@@ -158,4 +163,4 @@ const Invoices = () => {
   );
 };
 
-export default Invoices;
+export default Transaction;
