@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import useConfirm from "@/hooks/use-confirm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,7 @@ const Transaction = () => {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(params.get("search") || "");
+  const { ConfirmDialog, withConfirm } = useConfirm();
 
   // Sync local state with URL params when they change externally
   useEffect(() => {
@@ -87,6 +89,7 @@ const Transaction = () => {
 
   return (
     <div>
+      <ConfirmDialog />
       <div className="flex justify-between items-center mb-4 flex-wrap">
         <SearchBox
           placeholder="Search Transactions"
@@ -98,9 +101,19 @@ const Transaction = () => {
             <Button
               size={"sm"}
               variant="destructive"
-              onClick={() => {
-                console.log("Transactions to delete:", selected);
-              }}
+              onClick={withConfirm(
+                () => {
+                  // Replace with real delete logic
+                  console.log("Transactions to delete:", selected);
+                },
+                {
+                  title: "Delete selected transactions?",
+                  description: `This will permanently delete ${selected.length} ${selected.length === 1 ? "transaction" : "transactions"}.`,
+                  intent: "destructive",
+                  confirmText: "Delete",
+                  cancelText: "Cancel",
+                }
+              )}
             >
               Delete {selected.length}{" "}
               {selected.length === 1 ? "transaction" : "transactions"}

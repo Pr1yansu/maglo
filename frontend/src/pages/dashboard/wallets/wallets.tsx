@@ -15,7 +15,8 @@ import { gsap } from "@/lib/animations";
 import SearchBox from "@/components/ui/search-box";
 import ListData from "@/pages/dashboard/wallets/list-data";
 import { formatCurrency, cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { Plus, CreditCard as CreditCardIcon } from "lucide-react";
+import Link from "@/components/ui/link";
 import paymentData from "@/pages/dashboard/wallets/payment-data.json";
 import cardsData from "@/pages/dashboard/wallets/data.json";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -119,9 +120,20 @@ const Wallets = () => {
             </CardFooter>
           </Card>
         </div>
-        <div className="px-4">
+        <div className="px-4 space-y-4">
           <Button variant="secondary" className="w-full text-emerald-500">
             <Plus /> Add New Card
+          </Button>
+          <Button
+            asChild
+            variant="secondary"
+            className="w-full text-emerald-600 hover:text-emerald-700"
+            aria-label="View all cards"
+          >
+            <Link to="/dashboard/wallets/cards">
+              <CreditCardIcon />
+              View all cards
+            </Link>
           </Button>
         </div>
       </div>

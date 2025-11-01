@@ -29,6 +29,8 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
 import Link from "@/components/ui/link";
+import useConfirm from "@/hooks/use-confirm";
+import { useNavigate } from "react-router-dom";
 
 // Menu items.
 const items = [
@@ -88,6 +90,8 @@ const frameworks = [
 export function DashboardSidebar() {
   const pathname = useLocation().pathname;
   const linkRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const { withConfirm, ConfirmDialog } = useConfirm();
+  const navigate = useNavigate();
 
   const isActive = (currentPath: string, itemUrl: string) => {
     if (currentPath === itemUrl) return true;
@@ -110,11 +114,12 @@ export function DashboardSidebar() {
         duration: 0.5,
         ease: "power2.out",
         stagger: 0.1,
-      },
+      }
     );
   }, []);
   return (
     <Sidebar className="!border-r-0" collapsible="icon">
+      <ConfirmDialog />
       <SidebarHeader className="px-3 group-data-[collapsible=icon]:px-0">
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-3 text-sm font-semibold dark:text-white">
@@ -139,7 +144,7 @@ export function DashboardSidebar() {
                       "transition-all duration-300 ease-in-out",
                       "hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900",
                       isActive(pathname, item.url) &&
-                        "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm",
+                        "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm"
                     )}
                   >
                     <Link to={item.url}>
@@ -170,15 +175,39 @@ export function DashboardSidebar() {
                   "transition-all duration-300 ease-in-out",
                   "hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900",
                   isActive(pathname, item.url) &&
-                    "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm",
+                    "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm"
                 )}
               >
-                <Link to={item.url}>
-                  <item.icon className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110" />
-                  <span className="transition-colors duration-300 ease-in-out">
-                    {item.title}
-                  </span>
-                </Link>
+                {item.title === "Logout" ? (
+                  <button
+                    className="flex items-center gap-3"
+                    onClick={withConfirm(
+                      () => {
+                        // Replace with real logout logic if available
+                        navigate("/logout");
+                      },
+                      {
+                        title: "Log out?",
+                        description:
+                          "You will need to sign in again to continue.",
+                        confirmText: "Logout",
+                        cancelText: "Stay",
+                      }
+                    )}
+                  >
+                    <item.icon className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                    <span className="transition-colors duration-300 ease-in-out">
+                      {item.title}
+                    </span>
+                  </button>
+                ) : (
+                  <Link to={item.url}>
+                    <item.icon className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                    <span className="transition-colors duration-300 ease-in-out">
+                      {item.title}
+                    </span>
+                  </Link>
+                )}
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
@@ -211,7 +240,7 @@ export const DashboardHeader = () => {
     routeTitles[normalizedPath] ||
     routeTitles[
       Object.keys(routeTitles).find((route) =>
-        normalizedPath.startsWith(route),
+        normalizedPath.startsWith(route)
       ) || ""
     ] ||
     "";

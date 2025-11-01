@@ -43,7 +43,7 @@ const Link = ({
 
     const determineDirection = (
       currentPath: string,
-      targetPath: string,
+      targetPath: string
     ): TransitionDirection => {
       const routeHierarchy = [
         "/",
@@ -54,6 +54,7 @@ const Link = ({
         "/dashboard/invoices",
         "/dashboard/invoices/new",
         "/dashboard/wallets",
+        "/dashboard/wallets/cards",
         "/dashboard/settings",
       ];
 
@@ -96,7 +97,7 @@ const Link = ({
       className={cn(
         "transition-colors duration-200 hover:opacity-80",
         isTransitioning && "pointer-events-none",
-        className,
+        className
       )}
       {...props}
     >

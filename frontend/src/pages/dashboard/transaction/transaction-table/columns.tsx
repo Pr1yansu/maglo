@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import { Ellipsis } from "lucide-react";
+import useConfirm from "@/hooks/use-confirm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
@@ -123,6 +124,7 @@ export const columns: ColumnDef<Transactions>[] = [
     cell: ({ row }) => {
       const location = useLocation();
       const navigate = useNavigate();
+      const { withConfirm, ConfirmDialog } = useConfirm();
 
       const handleView = () => {
         navigate(`/dashboard/transactions/${row.original.id}`, {
@@ -144,8 +146,25 @@ export const columns: ColumnDef<Transactions>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleView}>View</DropdownMenuItem>
             <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={withConfirm(
+                () => {
+                  // Replace with real delete logic for single transaction
+                  console.log("Delete transaction:", row.original.id);
+                },
+                {
+                  title: "Delete this transaction?",
+                  description: "This action cannot be undone.",
+                  intent: "destructive",
+                  confirmText: "Delete",
+                }
+              )}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
+          {/* Scoped dialog for this cell */}
+          <ConfirmDialog />
         </DropdownMenu>
       );
     },

@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import { Ellipsis } from "lucide-react";
+import useConfirm from "@/hooks/use-confirm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
@@ -119,6 +120,7 @@ export const columns: ColumnDef<Invoices>[] = [
   {
     header: "Actions",
     cell: ({ row }) => {
+      const { withConfirm, ConfirmDialog } = useConfirm();
       const location = useLocation();
       const navigate = useNavigate();
 
@@ -142,8 +144,25 @@ export const columns: ColumnDef<Invoices>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleView}>View</DropdownMenuItem>
             <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={withConfirm(
+                () => {
+                  // Replace with real delete logic for single invoice
+                  console.log("Delete invoice:", row.original.id);
+                },
+                {
+                  title: "Delete this invoice?",
+                  description: "This action cannot be undone.",
+                  intent: "destructive",
+                  confirmText: "Delete",
+                }
+              )}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
+          {/* Scoped dialog for this cell */}
+          <ConfirmDialog />
         </DropdownMenu>
       );
     },
