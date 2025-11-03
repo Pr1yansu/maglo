@@ -24,7 +24,7 @@ export default function AllCards() {
   return (
     <div className="p-4" ref={containerRef}>
       <h3 className="text-lg font-semibold mb-4">All Cards</h3>
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cards.map((card, idx) => (
           <div key={card.id || idx} className="card-item">
             <CreditCard card={card} />
