@@ -6,8 +6,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { formatDate } from "date-fns";
+import InvoiceItemsForm from "@/components/form/invoice-items-form";
 import { Download, Eye, MoreHorizontal, Send } from "lucide-react";
+import { formatDate } from "date-fns";
 
 const invoices = [
   {
@@ -118,6 +119,16 @@ const CreateInvoice = () => {
             </CardContent>
           </Card>
         ))}
+        <div>
+          <h4 className="text-lg font-medium">Item Details</h4>
+          <p className="max-w-96 text-secondary-foreground">
+            Details item with more information about the product or service
+            provided.
+          </p>
+          <div>
+            <InvoiceItemsForm />
+          </div>
+        </div>
       </div>
       <div className="max-w-96 w-full">
         <ClientDetailsCard />
