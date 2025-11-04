@@ -1,51 +1,188 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- Critical CSS inline (for performance) -->
+    <style>
+      /* Critical styles for loading state */
+      .loading-fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #f9fafb;
+        color: #374151;
+      }
+      @media (prefers-color-scheme: dark) {
+        .loading-fallback {
+          background: #111827;
+          color: #f9fafb;
+        }
+      }
+      /* Prevent layout shift */
+      #root {
+        min-height: 100vh;
+      }
+    </style>
 
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts with display=swap for performance -->
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
 
     <!-- Icons and Manifest -->
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Viewport and SEO -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
+    <!-- Viewport and Core Meta -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <meta name="googlebot" content="index, follow" />
-    <meta name="theme-color" content="#3B82F6" />
+    <meta name="bingbot" content="index, follow" />
+
+    <!-- Theme and Color -->
+    <meta
+      name="theme-color"
+      content="#9AE93A"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#9AE93A"
+      media="(prefers-color-scheme: dark)"
+    />
     <meta name="color-scheme" content="light dark" />
+    <meta name="msapplication-TileColor" content="#9AE93A" />
 
     <!-- Performance hints -->
     <meta http-equiv="X-DNS-Prefetch-Control" content="on" />
     <link rel="dns-prefetch" href="//localhost:3000" />
+    <link rel="preload" href="/og-image.png" as="image" type="image/png" />
+
+    <!-- Security -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- Default meta (will be overridden by React Helmet) -->
-    <title>Maglo - Modern Web Application</title>
+    <title>Maglo - Modern Financial Dashboard & Wallet Management</title>
     <meta
       name="description"
-      content="A modern web application built with React, TypeScript, and NestJS"
+      content="Manage your finances with Maglo's modern dashboard. Track transactions, create invoices, manage wallets, and monitor your financial health with our intuitive platform."
     />
-    <meta property="twitter:url" content="https://maglo.com/" />
-    <meta property="twitter:title" content="Maglo - Modern Web Application" />
     <meta
-      property="twitter:description"
-      content="A modern web application built with React, TypeScript, and NestJS"
+      name="keywords"
+      content="financial dashboard, wallet management, invoice creation, transaction tracking, financial analytics, money management, fintech, personal finance"
     />
-    <meta property="twitter:image" content="/og-image.png" />
+    <meta name="author" content="Pr1yansu" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Maglo" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://maglo.com/" />
+    <meta
+      property="og:title"
+      content="Maglo - Modern Financial Dashboard & Wallet Management"
+    />
+    <meta
+      property="og:description"
+      content="Manage your finances with Maglo's modern dashboard. Track transactions, create invoices, manage wallets, and monitor your financial health with our intuitive platform."
+    />
+    <meta property="og:image" content="https://maglo.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Maglo Financial Dashboard Interface"
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@magloapp" />
+    <meta name="twitter:creator" content="@pr1yansu" />
+    <meta name="twitter:url" content="https://maglo.com/" />
+    <meta
+      name="twitter:title"
+      content="Maglo - Modern Financial Dashboard & Wallet Management"
+    />
+    <meta
+      name="twitter:description"
+      content="Manage your finances with Maglo's modern dashboard. Track transactions, create invoices, manage wallets, and monitor your financial health with our intuitive platform."
+    />
+    <meta name="twitter:image" content="https://maglo.com/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Maglo Financial Dashboard Interface"
+    />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Maglo",
+        "url": "https://maglo.com",
+        "description": "Modern financial dashboard and wallet management platform",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Pr1yansu"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Maglo",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://maglo.com/icon.svg"
+          }
+        }
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <noscript>
+      <div class="loading-fallback">
+        <div role="alert" aria-live="polite">
+          <h1>JavaScript Required</h1>
+          <p>
+            This application requires JavaScript to run. Please enable
+            JavaScript in your browser settings.
+          </p>
+        </div>
+      </div>
+    </noscript>
+    <div
+      id="root"
+      role="application"
+      aria-label="Maglo Financial Dashboard"
+    ></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

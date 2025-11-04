@@ -1,12 +1,29 @@
+# Maglo - Financial Dashboard
+# Robots.txt file
+
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/*
 
-# Sitemap
-Sitemap: https://maglo.com/sitemap.xml
+# Allow access to public assets
+Allow: /favicon.ico
+Allow: /robots.txt
+Allow: /sitemap.xml
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.gif$
+Allow: /*.svg$
 
-# Block access to dev files
-Disallow: /*.json$
-Disallow: /*.xml$
-Disallow: /*.txt$
+# Crawl delay for better server performance
+Crawl-delay: 1
+
+# Block access to dev files and APIs
 Disallow: /api/
 Disallow: /admin/
+Disallow: /*.json$
+
+# Sitemap location
+Sitemap: https://maglo.com/sitemap.xml

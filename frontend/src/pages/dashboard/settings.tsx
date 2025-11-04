@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { SEO } from "@/components/SEO";
 import {
   Bell,
   Lock,
@@ -54,318 +55,334 @@ const Settings = () => {
   };
 
   return (
-    <div ref={containerRef} className="space-y-8 max-w-4xl opacity-0">
-      {/* Header */}
-      <div
-        ref={(el) => (itemsRef.current[0] = el)}
-        className="flex items-center space-x-4 opacity-0"
-      >
-        <div className="p-2 bg-primary/10 rounded-lg">
-          <SettingsIcon className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your account settings and preferences
-          </p>
-        </div>
-      </div>
+    <>
+      <SEO
+        title="Settings - Account & Preferences"
+        description="Manage your Maglo account settings, privacy preferences, notification settings, and security options. Customize your financial dashboard experience."
+        keywords="settings, account preferences, privacy settings, security, notifications, profile management"
+        schema="WebPage"
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Dashboard", url: "/dashboard" },
+          { name: "Settings", url: "/dashboard/settings" },
+        ]}
+      />
 
-      {/* Profile Settings */}
-      <div
-        ref={(el) => (itemsRef.current[1] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <User className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Profile Information</h2>
-        </div>
+      <div ref={containerRef} className="space-y-8 max-w-4xl opacity-0">
+        {/* Header */}
+        <header
+          ref={(el) => (itemsRef.current[0] = el)}
+          className="flex items-center space-x-4 opacity-0"
+        >
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <SettingsIcon className="h-6 w-6 text-primary" aria-hidden="true" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Settings</h1>
+            <p className="text-muted-foreground">
+              Manage your account settings and preferences
+            </p>
+          </div>
+        </header>
 
-        <div className="bg-card border rounded-lg p-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={profile.name}
-                onChange={(e) => handleProfileChange("name", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={profile.email}
-                onChange={(e) => handleProfileChange("email", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                value={profile.phone}
-                onChange={(e) => handleProfileChange("phone", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                value={profile.company}
-                onChange={(e) => handleProfileChange("company", e.target.value)}
-              />
-            </div>
+        {/* Profile Settings */}
+        <div
+          ref={(el) => (itemsRef.current[1] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <User className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Profile Information</h2>
           </div>
 
-          <div className="flex justify-end space-x-2">
-            <Button
-              ref={(el) => (itemsRef.current[7] = el)}
-              variant="outline"
-              className="opacity-0"
-            >
-              Cancel
-            </Button>
-            <Button
-              ref={(el) => (itemsRef.current[8] = el)}
-              className="opacity-0"
-            >
-              Save Changes
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Appearance Settings */}
-      <div
-        ref={(el) => (itemsRef.current[2] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <Palette className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Appearance</h2>
-        </div>
-
-        <div className="bg-card border rounded-lg p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Theme</h3>
-              <p className="text-sm text-muted-foreground">
-                Choose your preferred theme
-              </p>
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  value={profile.name}
+                  onChange={(e) => handleProfileChange("name", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={profile.email}
+                  onChange={(e) => handleProfileChange("email", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  value={profile.phone}
+                  onChange={(e) => handleProfileChange("phone", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="company">Company</Label>
+                <Input
+                  id="company"
+                  value={profile.company}
+                  onChange={(e) =>
+                    handleProfileChange("company", e.target.value)
+                  }
+                />
+              </div>
             </div>
-            <ThemeSwitcher />
-          </div>
 
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Language</h3>
-              <p className="text-sm text-muted-foreground">
-                Select your preferred language
-              </p>
+            <div className="flex justify-end space-x-2">
+              <Button
+                ref={(el) => (itemsRef.current[7] = el)}
+                variant="outline"
+                className="opacity-0"
+              >
+                Cancel
+              </Button>
+              <Button
+                ref={(el) => (itemsRef.current[8] = el)}
+                className="opacity-0"
+              >
+                Save Changes
+              </Button>
             </div>
-            <select
-              className="px-3 py-2 border rounded-md bg-background"
-              title="Select your preferred language"
-              aria-label="Language selection"
-            >
-              <option>English</option>
-              <option>Spanish</option>
-              <option>French</option>
-              <option>German</option>
-            </select>
           </div>
         </div>
-      </div>
 
-      <Separator />
+        <Separator />
 
-      {/* Notification Settings */}
-      <div
-        ref={(el) => (itemsRef.current[3] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <Bell className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Notifications</h2>
-        </div>
+        {/* Appearance Settings */}
+        <div
+          ref={(el) => (itemsRef.current[2] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <Palette className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Appearance</h2>
+          </div>
 
-        <div className="bg-card border rounded-lg p-6 space-y-4">
-          {Object.entries({
-            email: "Email Notifications",
-            push: "Push Notifications",
-            marketing: "Marketing Updates",
-            security: "Security Alerts",
-          }).map(([key, label]) => (
-            <div key={key} className="flex items-center justify-between">
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-medium">{label}</h3>
+                <h3 className="font-medium">Theme</h3>
                 <p className="text-sm text-muted-foreground">
-                  Receive {label.toLowerCase()} about your account
+                  Choose your preferred theme
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only peer"
-                  checked={notifications[key as keyof typeof notifications]}
-                  onChange={() => handleNotificationChange(key)}
-                  aria-label={`Toggle ${label}`}
-                  title={`Toggle ${label}`}
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
+              <ThemeSwitcher />
             </div>
-          ))}
+
+            <Separator />
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Language</h3>
+                <p className="text-sm text-muted-foreground">
+                  Select your preferred language
+                </p>
+              </div>
+              <select
+                className="px-3 py-2 border rounded-md bg-background"
+                title="Select your preferred language"
+                aria-label="Language selection"
+              >
+                <option>English</option>
+                <option>Spanish</option>
+                <option>French</option>
+                <option>German</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Notification Settings */}
+        <div
+          ref={(el) => (itemsRef.current[3] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <Bell className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Notifications</h2>
+          </div>
+
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            {Object.entries({
+              email: "Email Notifications",
+              push: "Push Notifications",
+              marketing: "Marketing Updates",
+              security: "Security Alerts",
+            }).map(([key, label]) => (
+              <div key={key} className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">{label}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Receive {label.toLowerCase()} about your account
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={notifications[key as keyof typeof notifications]}
+                    onChange={() => handleNotificationChange(key)}
+                    aria-label={`Toggle ${label}`}
+                    title={`Toggle ${label}`}
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Security Settings */}
+        <div
+          ref={(el) => (itemsRef.current[4] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <Shield className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Security</h2>
+          </div>
+
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Password</h3>
+                <p className="text-sm text-muted-foreground">
+                  Last changed 3 months ago
+                </p>
+              </div>
+              <Button
+                ref={(el) => (itemsRef.current[9] = el)}
+                variant="outline"
+                className="opacity-0"
+              >
+                <Lock className="h-4 w-4 mr-2" />
+                Change Password
+              </Button>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Two-Factor Authentication</h3>
+                <p className="text-sm text-muted-foreground">
+                  Add an extra layer of security
+                </p>
+              </div>
+              <Button variant="outline">Enable 2FA</Button>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Active Sessions</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage your active sessions
+                </p>
+              </div>
+              <Button variant="outline">View Sessions</Button>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Billing Settings */}
+        <div
+          ref={(el) => (itemsRef.current[5] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <CreditCard className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Billing & Subscription</h2>
+          </div>
+
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Current Plan</h3>
+                <p className="text-sm text-muted-foreground">
+                  Pro Plan - $29/month
+                </p>
+              </div>
+              <Button variant="outline">Upgrade Plan</Button>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Payment Method</h3>
+                <p className="text-sm text-muted-foreground">
+                  •••• •••• •••• 4242
+                </p>
+              </div>
+              <Button variant="outline">Update Payment</Button>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Billing History</h3>
+                <p className="text-sm text-muted-foreground">
+                  Download your invoices
+                </p>
+              </div>
+              <Button variant="outline">
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Danger Zone */}
+        <div
+          ref={(el) => (itemsRef.current[6] = el)}
+          className="space-y-6 opacity-0"
+        >
+          <div className="flex items-center space-x-2">
+            <Trash2 className="h-5 w-5 text-destructive" />
+            <h2 className="text-xl font-semibold text-destructive">
+              Danger Zone
+            </h2>
+          </div>
+
+          <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-destructive">Delete Account</h3>
+                <p className="text-sm text-muted-foreground">
+                  Once you delete your account, there is no going back. Please
+                  be certain.
+                </p>
+              </div>
+              <Button
+                ref={(el) => (itemsRef.current[10] = el)}
+                variant="destructive"
+                className="opacity-0"
+              >
+                Delete Account
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-
-      <Separator />
-
-      {/* Security Settings */}
-      <div
-        ref={(el) => (itemsRef.current[4] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <Shield className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Security</h2>
-        </div>
-
-        <div className="bg-card border rounded-lg p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Password</h3>
-              <p className="text-sm text-muted-foreground">
-                Last changed 3 months ago
-              </p>
-            </div>
-            <Button
-              ref={(el) => (itemsRef.current[9] = el)}
-              variant="outline"
-              className="opacity-0"
-            >
-              <Lock className="h-4 w-4 mr-2" />
-              Change Password
-            </Button>
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Two-Factor Authentication</h3>
-              <p className="text-sm text-muted-foreground">
-                Add an extra layer of security
-              </p>
-            </div>
-            <Button variant="outline">Enable 2FA</Button>
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Active Sessions</h3>
-              <p className="text-sm text-muted-foreground">
-                Manage your active sessions
-              </p>
-            </div>
-            <Button variant="outline">View Sessions</Button>
-          </div>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Billing Settings */}
-      <div
-        ref={(el) => (itemsRef.current[5] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <CreditCard className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Billing & Subscription</h2>
-        </div>
-
-        <div className="bg-card border rounded-lg p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Current Plan</h3>
-              <p className="text-sm text-muted-foreground">
-                Pro Plan - $29/month
-              </p>
-            </div>
-            <Button variant="outline">Upgrade Plan</Button>
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Payment Method</h3>
-              <p className="text-sm text-muted-foreground">
-                •••• •••• •••• 4242
-              </p>
-            </div>
-            <Button variant="outline">Update Payment</Button>
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Billing History</h3>
-              <p className="text-sm text-muted-foreground">
-                Download your invoices
-              </p>
-            </div>
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              Download
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Danger Zone */}
-      <div
-        ref={(el) => (itemsRef.current[6] = el)}
-        className="space-y-6 opacity-0"
-      >
-        <div className="flex items-center space-x-2">
-          <Trash2 className="h-5 w-5 text-destructive" />
-          <h2 className="text-xl font-semibold text-destructive">
-            Danger Zone
-          </h2>
-        </div>
-
-        <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-destructive">Delete Account</h3>
-              <p className="text-sm text-muted-foreground">
-                Once you delete your account, there is no going back. Please be
-                certain.
-              </p>
-            </div>
-            <Button
-              ref={(el) => (itemsRef.current[10] = el)}
-              variant="destructive"
-              className="opacity-0"
-            >
-              Delete Account
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

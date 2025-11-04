@@ -32,37 +32,42 @@ import Link from "@/components/ui/link";
 import useConfirm from "@/hooks/use-confirm";
 import { useNavigate } from "react-router-dom";
 
-// Menu items.
+// Menu items with enhanced accessibility
 const items = [
   {
     title: "Dashboard",
     url: "/dashboard",
     icon: Home,
     index: 0,
+    description: "View your financial overview and key metrics",
   },
   {
     title: "Transactions",
     url: "/dashboard/transactions",
     icon: ChartLine,
     index: 1,
+    description: "Track and manage your financial transactions",
   },
   {
     title: "Invoices",
     url: "/dashboard/invoices",
     icon: ReceiptCent,
     index: 2,
+    description: "Create and manage invoices for your business",
   },
   {
     title: "Wallets",
     url: "/dashboard/wallets",
     icon: Wallet,
     index: 3,
+    description: "Manage your accounts and payment methods",
   },
   {
     title: "Settings",
     url: "/dashboard/settings",
     icon: Settings,
     index: 4,
+    description: "Configure your account and preferences",
   },
 ];
 
@@ -72,12 +77,14 @@ const footerItems = [
     url: "/help",
     icon: LucideHelpCircle,
     index: 5,
+    description: "Get help and support for using Maglo",
   },
   {
     title: "Logout",
     url: "/logout",
     icon: LogOut,
     index: 6,
+    description: "Sign out of your Maglo account",
   },
 ];
 
@@ -118,11 +125,20 @@ export function DashboardSidebar() {
     );
   }, []);
   return (
-    <Sidebar className="!border-r-0" collapsible="icon">
+    <Sidebar
+      className="!border-r-0"
+      collapsible="icon"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <ConfirmDialog />
       <SidebarHeader className="px-3 group-data-[collapsible=icon]:px-0">
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 py-3 text-sm font-semibold dark:text-white">
+          <SidebarGroupLabel
+            className="px-4 py-3 text-sm font-semibold dark:text-white"
+            role="heading"
+            aria-level={2}
+          >
             Maglo
           </SidebarGroupLabel>
         </SidebarGroup>
@@ -130,11 +146,12 @@ export function DashboardSidebar() {
       <SidebarContent className="px-3 group-data-[collapsible=icon]:px-0">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu role="menu" aria-label="Primary navigation menu">
               {items.map((item) => (
                 <SidebarMenuItem
                   key={item.title}
                   ref={(el) => (linkRefs.current[item.index] = el)}
+                  role="none"
                 >
                   <SidebarMenuButton
                     asChild
@@ -143,12 +160,24 @@ export function DashboardSidebar() {
                       "text-zinc-700 dark:text-secondary-foreground",
                       "transition-all duration-300 ease-in-out",
                       "hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900",
+                      "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                       isActive(pathname, item.url) &&
                         "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm"
                     )}
                   >
-                    <Link to={item.url}>
-                      <item.icon className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                    <Link
+                      to={item.url}
+                      role="menuitem"
+                      aria-current={
+                        isActive(pathname, item.url) ? "page" : undefined
+                      }
+                      aria-label={`${item.title} - ${item.description}`}
+                      title={item.description}
+                    >
+                      <item.icon
+                        className="!size-5 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                        aria-hidden="true"
+                      />
                       <span className="transition-colors duration-300 ease-in-out">
                         {item.title}
                       </span>
