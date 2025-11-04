@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Modern full-stack application with NestJS backend and React frontend",
   "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run start:dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build": "npm run build:backend && npm run build:frontend",

@@ -57,16 +57,38 @@ const Link = ({
         "/dashboard/wallets",
         "/dashboard/wallets/cards",
         "/dashboard/settings",
+        "/help",
       ];
 
-      const currentIndex = routeHierarchy.indexOf(currentPath);
-      const targetIndex = routeHierarchy.indexOf(targetPath);
+      // Normalize paths by removing trailing slashes
+      const normalizedCurrent = currentPath.replace(/\/$/, "");
+      const normalizedTarget = targetPath.replace(/\/$/, "");
 
-      if (currentIndex === -1 || targetIndex === -1) {
-        return "forward";
-      }
+      const currentIndex = routeHierarchy.indexOf(normalizedCurrent);
+      const targetIndex = routeHierarchy.indexOf(normalizedTarget);
 
-      return targetIndex > currentIndex ? "forward" : "backward";
+      // If exact match not found, try to find parent route
+      const findClosestIndex = (path: string) => {
+        let index = routeHierarchy.indexOf(path);
+        if (index !== -1) return index;
+
+        // Try to find the closest parent route
+        for (let i = routeHierarchy.length - 1; i >= 0; i--) {
+          if (path.startsWith(routeHierarchy[i]) && routeHierarchy[i] !== "/") {
+            return i;
+          }
+        }
+        return 0; // Default to home
+      };
+
+      const currentIdx =
+        currentIndex !== -1
+          ? currentIndex
+          : findClosestIndex(normalizedCurrent);
+      const targetIdx =
+        targetIndex !== -1 ? targetIndex : findClosestIndex(normalizedTarget);
+
+      return targetIdx > currentIdx ? "forward" : "backward";
     };
 
     if (onClick) {
@@ -74,11 +96,17 @@ const Link = ({
     }
 
     if (isTransitioning || location.pathname === to) {
+      console.log(
+        "🚫 Link click blocked - already transitioning or same route"
+      );
       return;
     }
 
     const direction =
       transitionDirection || determineDirection(location.pathname, to);
+
+    console.log(`🔗 Link clicked: ${location.pathname} → ${to} (${direction})`);
+
     setTransitionDirection(direction);
 
     // Only set transition type if explicitly provided, otherwise use context default
@@ -87,8 +115,10 @@ const Link = ({
     }
 
     if (preventTransition) {
+      console.log("🚀 Direct navigation (no transition)");
       navigate(to, { replace, state });
     } else {
+      console.log("🎭 Starting transition animation...");
       await startTransition(() => {
         navigate(to, { replace, state });
       }, transitionType || contextTransitionType);

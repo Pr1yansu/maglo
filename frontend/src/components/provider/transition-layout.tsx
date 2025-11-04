@@ -14,7 +14,7 @@ const TransitionContainer = ({ children }: TransitionLayoutProps) => {
   return (
     <div
       ref={containerRef}
-      className="transition-container w-full h-full opacity-100 overflow-hidden relative"
+      className="transition-container w-full h-full opacity-100 overflow-hidden relative smooth-transition"
     >
       {children}
     </div>

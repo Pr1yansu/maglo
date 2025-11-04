@@ -124,6 +124,15 @@
         overflow: hidden !important;
     }
 
+    /* Enhanced smooth transitions */
+    .smooth-transition {
+        backface-visibility: hidden;
+        perspective: 1000px;
+        will-change: opacity, transform;
+        transform: translateZ(0);
+        /* Force hardware acceleration */
+    }
+
     /* Hide scrollbars during transitions */
     .transitioning {
         overflow: hidden !important;
