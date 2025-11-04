@@ -24,7 +24,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       <div
         onClick={handleFocus}
         className={cn(
-          "flex items-center gap-3 px-4 py-2 bg-secondary-foreground/20 rounded-lg cursor-text focus-within:ring-2 focus-within:ring-primary/30 transition-all",
+          "flex items-center gap-3 px-4 py-2 dark:border-0 border dark:bg-secondary-foreground/20 rounded-lg cursor-text focus-within:ring-2 focus-within:ring-primary/30 transition-all",
           className
         )}
       >

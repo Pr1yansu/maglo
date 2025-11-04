@@ -22,7 +22,10 @@ const CreateInvoice = lazy(
 );
 const Wallets = lazy(() => import("./pages/dashboard/wallets/wallets"));
 const WalletCards = lazy(() => import("./pages/dashboard/wallets/cards"));
-const DashboardSettings = lazy(() => import("./pages/dashboard/settings"));
+const DashboardSettings = lazy(
+  () => import("./pages/dashboard/settings/settings")
+);
+const Help = lazy(() => import("../src/pages/dashboard/help/help"));
 const NotFound = lazy(() => import("../src/pages/not-found"));
 
 function App() {
@@ -32,18 +35,15 @@ function App() {
       <SEO />
       <Suspense fallback={<Loader />}>
         <Routes>
-          {/* Public Routes */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
           </Route>
 
-          {/* Auth Routes */}
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
 
-          {/* Protected Routes */}
           <Route
             element={
               <ProtectedRoute>
@@ -60,7 +60,8 @@ function App() {
             <Route path="/dashboard/settings" element={<DashboardSettings />} />
           </Route>
 
-          {/* Not Found Route */}
+          <Route path="/help" element={<Help />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

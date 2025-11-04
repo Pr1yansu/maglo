@@ -6,7 +6,7 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { animations, animationUtils } from "@/lib/animations";
+import { animationUtils } from "@/lib/animations";
 
 export type TransitionType = "slide" | "fade" | "scale";
 export type TransitionDirection = "forward" | "backward";
@@ -16,7 +16,7 @@ interface TransitionContextType {
   isTransitioning: boolean;
   startTransition: (
     callback: () => void,
-    type?: TransitionType,
+    type?: TransitionType
   ) => Promise<void>;
   setTransitionDirection: (direction: TransitionDirection) => void;
   setTransitionType: (type: TransitionType) => void;
@@ -25,7 +25,7 @@ interface TransitionContextType {
 }
 
 const TransitionContext = createContext<TransitionContextType | undefined>(
-  undefined,
+  undefined
 );
 
 interface TransitionProviderProps {
@@ -40,21 +40,18 @@ export const TransitionProvider = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionType, setTransitionType] = useState<TransitionType>(
-    defaultTransitionType,
+    defaultTransitionType
   );
 
-  // ✅ Keep direction state + ref fully in sync instantly
   const [transitionDirection, _setTransitionDirection] =
     useState<TransitionDirection>("forward");
   const directionRef = useRef<TransitionDirection>("forward");
 
-  // custom setter that updates both immediately
   const setTransitionDirection = (direction: TransitionDirection) => {
     directionRef.current = direction;
     _setTransitionDirection(direction);
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       animationUtils.transitionUtils.showScrollbars();
@@ -65,11 +62,10 @@ export const TransitionProvider = ({
   }, []);
 
   const startTransition = useCallback(
-    async (callback: () => void, type: TransitionType = transitionType) => {
+    async (callback: () => void, _type?: TransitionType) => {
       if (isTransitioning || !containerRef.current) return;
 
       setIsTransitioning(true);
-      const container = containerRef.current;
 
       const restoreScrollbars = () => {
         animationUtils.transitionUtils.showScrollbars();
@@ -77,61 +73,18 @@ export const TransitionProvider = ({
       };
 
       try {
-        animationUtils.transitionUtils.hideScrollbars();
-
-        const currentDirection = directionRef.current;
-
-        // -------- EXIT Animation --------
-        let exitAnimation: gsap.core.Tween;
-        switch (type) {
-          case "slide":
-            exitAnimation =
-              currentDirection === "forward"
-                ? animations.routeTransitions.slideLeft.exit(container)
-                : animations.routeTransitions.slideRight.exit(container);
-            break;
-          case "fade":
-            exitAnimation = animations.routeTransitions.fade.exit(container);
-            break;
-          case "scale":
-            exitAnimation = animations.routeTransitions.scale.exit(container);
-            break;
-          default:
-            exitAnimation = animations.routeTransitions.fade.exit(container);
-        }
-
-        await exitAnimation.then();
-
-        // -------- NAVIGATION --------
+        // Just perform the navigation without any animations
         callback();
         await new Promise((resolve) => setTimeout(resolve, 50));
 
-        // -------- ENTER Animation --------
-        let enterAnimation: gsap.core.Tween;
-        switch (type) {
-          case "slide":
-            enterAnimation =
-              currentDirection === "forward"
-                ? animations.routeTransitions.slideLeft.enter(container)
-                : animations.routeTransitions.slideRight.enter(container);
-            break;
-          case "fade":
-            enterAnimation = animations.routeTransitions.fade.enter(container);
-            break;
-          case "scale":
-            enterAnimation = animations.routeTransitions.scale.enter(container);
-            break;
-          default:
-            enterAnimation = animations.routeTransitions.fade.enter(container);
-        }
-
-        enterAnimation.eventCallback("onComplete", restoreScrollbars);
+        // Immediately restore scrollbars and finish transition
+        restoreScrollbars();
       } catch (error) {
         console.error("Transition error:", error);
         restoreScrollbars();
       }
     },
-    [isTransitioning, transitionType],
+    [isTransitioning]
   );
 
   const value: TransitionContextType = {

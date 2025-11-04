@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Trash2, Plus, X } from "lucide-react";
+import { animations } from "@/lib/animations";
 
 const invoiceItemSchema = z.object({
   productName: z.string().min(1, "Product name is required"),
@@ -28,6 +30,8 @@ const invoicesSchema = z.object({
 });
 
 const InvoiceItemsForm = () => {
+  const containerRef = useRef<HTMLFormElement>(null);
+
   const form = useForm<z.infer<typeof invoicesSchema>>({
     resolver: zodResolver(invoicesSchema),
     defaultValues: {
@@ -50,12 +54,19 @@ const InvoiceItemsForm = () => {
     name: "items",
   });
 
+  // Add entrance animation
+  useEffect(() => {
+    if (containerRef.current) {
+      animations.fadeInUp(containerRef.current);
+    }
+  }, []);
+
   function onSubmit(values: z.infer<typeof invoicesSchema>) {
     console.log(values);
   }
 
   const addItem = () => {
-    append({
+    const newItem = {
       productName: "",
       description: "",
       quantity: 1,
@@ -63,7 +74,18 @@ const InvoiceItemsForm = () => {
       amount: 0,
       discount: 0,
       tax: 0,
-    });
+    };
+    append(newItem);
+
+    // Animate the new item
+    setTimeout(() => {
+      const newItemElement = containerRef.current?.querySelector(
+        ".invoice-item:last-child"
+      );
+      if (newItemElement) {
+        animations.scaleIn(newItemElement);
+      }
+    }, 50);
   };
 
   const calculateAmount = (index: number) => {
@@ -108,10 +130,14 @@ const InvoiceItemsForm = () => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-4">
+      <form
+        ref={containerRef}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 opacity-0"
+      >
         <div className="space-y-6">
           {fields.map((field, index) => (
-            <div key={field.id} className="rounded-lg space-y-4">
+            <div key={field.id} className="rounded-lg space-y-4 invoice-item">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}

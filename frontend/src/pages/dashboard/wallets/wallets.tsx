@@ -1,6 +1,10 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import StackedCards from "@/components/ui/stacked-credit-cards";
 import { useGSAP } from "@gsap/react";
+import {
+  useEntranceAnimation,
+  useStaggerAnimation,
+} from "@/hooks/use-animations";
 import { type CreditCard } from "@/components/ui/credit-card";
 import {
   Card,
@@ -32,7 +36,6 @@ const Wallets = () => {
   const regularTabRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Animate tab underline
   useGSAP(() => {
     if (!underlineRef.current || !containerRef.current) return;
     const activeTabRef =
@@ -49,7 +52,6 @@ const Wallets = () => {
     }
   }, [activeTab]);
 
-  // Initial underline position
   useGSAP(() => {
     if (!underlineRef.current || !allTabRef.current || !containerRef.current)
       return;
@@ -61,7 +63,6 @@ const Wallets = () => {
     });
   }, []);
 
-  // ✅ Fade animation when tab content changes
   useEffect(() => {
     if (contentRef.current) {
       gsap.fromTo(
@@ -83,12 +84,20 @@ const Wallets = () => {
     return payments.filter((p) => new Date(p.upcoming).getTime() > Date.now());
   }, [payments]);
 
+  // Animation refs
+  const leftSideRef = useEntranceAnimation(0);
+  const rightSideRef = useEntranceAnimation(0.3);
+  const { itemsRef } = useStaggerAnimation(0.1);
+
   return (
     <div className="min-h-screen p-4 py-8 lg:flex">
-      <div className="lg:w-1/2">
+      <div ref={leftSideRef} className="lg:w-1/2 opacity-0">
         <StackedCards cards={cards} />
         <div className="px-4 pt-8 pb-4">
-          <Card className="bg-secondary/10">
+          <Card
+            ref={(el) => (itemsRef.current[2] = el)}
+            className="bg-secondary/10 opacity-0"
+          >
             <CardHeader className="text-sm text-secondary">
               Your balance
             </CardHeader>
@@ -121,13 +130,18 @@ const Wallets = () => {
           </Card>
         </div>
         <div className="px-4 space-y-4">
-          <Button variant="secondary" className="w-full text-emerald-500">
+          <Button
+            ref={(el) => (itemsRef.current[0] = el)}
+            variant="secondary"
+            className="w-full text-emerald-500 opacity-0"
+          >
             <Plus /> Add New Card
           </Button>
           <Button
+            ref={(el) => (itemsRef.current[1] = el)}
             asChild
             variant="secondary"
-            className="w-full text-emerald-600 hover:text-emerald-700"
+            className="w-full text-emerald-600 hover:text-emerald-700 opacity-0"
             aria-label="View all cards"
           >
             <Link to="/dashboard/wallets/cards">
@@ -139,7 +153,7 @@ const Wallets = () => {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="lg:w-1/2 p-5" ref={contentRef}>
+      <div ref={rightSideRef} className="lg:w-1/2 p-5 opacity-0">
         <h4 className="text-lg pb-6">My Payments</h4>
 
         <div>
@@ -191,10 +205,16 @@ const Wallets = () => {
         </div>
 
         <div className="py-2 space-y-2">
-          <h6 className="text-sm text-secondary">
+          <h6
+            ref={(el) => (itemsRef.current[3] = el)}
+            className="text-sm text-secondary opacity-0"
+          >
             {activeTab === "All" ? "Today" : "Regular Payments"}
           </h6>
-          <ScrollArea className="h-[300px] rounded-md border px-4">
+          <ScrollArea
+            ref={(el) => (itemsRef.current[4] = el)}
+            className="h-[300px] rounded-md border px-4 opacity-0"
+          >
             {filteredPayments.map((p, i) => (
               <ListData
                 key={i}
@@ -209,9 +229,22 @@ const Wallets = () => {
 
         {activeTab === "All" && (
           <div className="py-2 space-y-2">
-            <h4 className="text-lg py-2">Upcoming Payments</h4>
-            <h6 className="text-sm text-secondary">Next month</h6>
-            <ScrollArea className="h-[200px] rounded-md border px-4">
+            <h4
+              ref={(el) => (itemsRef.current[5] = el)}
+              className="text-lg py-2 opacity-0"
+            >
+              Upcoming Payments
+            </h4>
+            <h6
+              ref={(el) => (itemsRef.current[6] = el)}
+              className="text-sm text-secondary opacity-0"
+            >
+              Next month
+            </h6>
+            <ScrollArea
+              ref={(el) => (itemsRef.current[7] = el)}
+              className="h-[200px] rounded-md border px-4 opacity-0"
+            >
               {upcomingPayments.map((p, i) => (
                 <ListData
                   key={i}

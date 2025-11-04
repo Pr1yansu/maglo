@@ -100,26 +100,6 @@ export const columns: ColumnDef<Transactions>[] = [
     accessorKey: "invoiceID",
   },
   {
-    header: "Status",
-    accessorKey: "status",
-    cell: ({ row }) => {
-      const status = row.original.status || "completed";
-      return (
-        <Badge
-          variant={
-            status === "completed"
-              ? "default"
-              : status === "pending"
-                ? "secondary"
-                : "destructive"
-          }
-        >
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Badge>
-      );
-    },
-  },
-  {
     header: "Actions",
     cell: ({ row }) => {
       const location = useLocation();

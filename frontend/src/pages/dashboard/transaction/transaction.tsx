@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import useConfirm from "@/hooks/use-confirm";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useEntranceAnimation } from "@/hooks/use-animations";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -10,7 +11,7 @@ import {
   columns,
   type Transactions as Transaction,
 } from "@/pages/dashboard/transaction/transaction-table/columns";
-import { CreditCard, Filter } from "lucide-react";
+import { Filter } from "lucide-react";
 import rawData from "@/pages/dashboard/transaction/transaction-table/data.json";
 
 const filters = [
@@ -47,14 +48,7 @@ const filters = [
   },
 ];
 
-const generateRandomTransactionID = () => {
-  const prefix = "TXN-";
-  const randomNumber = Math.floor(100000 + Math.random() * 900000);
-  return `${prefix}${randomNumber}`;
-};
-
 const Transaction = () => {
-  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(params.get("search") || "");
   const { ConfirmDialog, withConfirm } = useConfirm();
@@ -87,10 +81,17 @@ const Transaction = () => {
 
   const [selected, setSelected] = useState<Transaction[]>([]);
 
+  // Animation refs
+  const headerRef = useEntranceAnimation(0);
+  const tableRef = useEntranceAnimation(0.2);
+
   return (
     <div>
       <ConfirmDialog />
-      <div className="flex justify-between items-center mb-4 flex-wrap">
+      <div
+        ref={headerRef}
+        className="flex justify-between items-center mb-4 flex-wrap opacity-0"
+      >
         <SearchBox
           placeholder="Search Transactions"
           value={searchValue}
@@ -103,7 +104,6 @@ const Transaction = () => {
               variant="destructive"
               onClick={withConfirm(
                 () => {
-                  // Replace with real delete logic
                   console.log("Transactions to delete:", selected);
                 },
                 {
@@ -118,20 +118,7 @@ const Transaction = () => {
               Delete {selected.length}{" "}
               {selected.length === 1 ? "transaction" : "transactions"}
             </Button>
-          ) : (
-            <Button
-              size={"sm"}
-              onClick={() =>
-                navigate(
-                  "/dashboard/transactions/new?transactionID=" +
-                    generateRandomTransactionID()
-                )
-              }
-            >
-              <CreditCard className="mr-2" />
-              New Transaction
-            </Button>
-          )}
+          ) : null}
 
           <FilterButton
             onApply={(filters) => {
@@ -153,25 +140,27 @@ const Transaction = () => {
           </FilterButton>
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        data={rows}
-        searchConfig={{
-          enabled: true,
-          useUrlParams: true,
-          paramNames: { query: "search", status: "status" },
-          getFields: (row: Transaction) => ({
-            name: row.product.name,
-            email: row.product.email,
-            type: row.type,
-            invoiceID: row.invoiceID,
-            status: row.status || "completed",
-          }),
-          weights: { name: 3, invoiceID: 2, email: 2, type: 1, status: 1 },
-          statusFieldKey: "status",
-        }}
-        onSelectionChange={setSelected}
-      />
+      <div ref={tableRef} className="opacity-0">
+        <DataTable
+          columns={columns}
+          data={rows}
+          searchConfig={{
+            enabled: true,
+            useUrlParams: true,
+            paramNames: { query: "search", status: "status" },
+            getFields: (row: Transaction) => ({
+              name: row.product.name,
+              email: row.product.email,
+              type: row.type,
+              invoiceID: row.invoiceID,
+              status: row.status || "completed",
+            }),
+            weights: { name: 3, invoiceID: 2, email: 2, type: 1, status: 1 },
+            statusFieldKey: "status",
+          }}
+          onSelectionChange={setSelected}
+        />
+      </div>
     </div>
   );
 };

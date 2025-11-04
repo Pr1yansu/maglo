@@ -17,7 +17,7 @@ export const animations = {
         duration: 0.8,
         delay,
         ease: "power3.out",
-      },
+      }
     );
   },
 
@@ -32,7 +32,7 @@ export const animations = {
         duration: 0.8,
         delay,
         ease: "power3.out",
-      },
+      }
     );
   },
 
@@ -47,7 +47,7 @@ export const animations = {
         duration: 0.8,
         delay,
         ease: "power3.out",
-      },
+      }
     );
   },
 
@@ -62,7 +62,7 @@ export const animations = {
         duration: 0.6,
         delay,
         ease: "back.out(1.7)",
-      },
+      }
     );
   },
 
@@ -77,7 +77,7 @@ export const animations = {
         duration: 0.6,
         stagger,
         ease: "power3.out",
-      },
+      }
     );
   },
 
@@ -94,7 +94,7 @@ export const animations = {
       return gsap.fromTo(
         element,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
       );
     },
     exit: (element: Element | string) => {
@@ -115,7 +115,7 @@ export const animations = {
         return gsap.fromTo(
           element,
           { opacity: 0, xPercent: 100 },
-          { opacity: 1, xPercent: 0, duration: 0.5, ease: "power3.out" },
+          { opacity: 1, xPercent: 0, duration: 0.5, ease: "power3.out" }
         );
       },
       exit: (element: Element | string) => {
@@ -132,7 +132,7 @@ export const animations = {
         return gsap.fromTo(
           element,
           { opacity: 0, xPercent: -100 },
-          { opacity: 1, xPercent: 0, duration: 0.5, ease: "power3.out" },
+          { opacity: 1, xPercent: 0, duration: 0.5, ease: "power3.out" }
         );
       },
       exit: (element: Element | string) => {
@@ -150,7 +150,7 @@ export const animations = {
         return gsap.fromTo(
           element,
           { opacity: 0 },
-          { opacity: 1, duration: 0.4, ease: "power2.out" },
+          { opacity: 1, duration: 0.4, ease: "power2.out" }
         );
       },
       exit: (element: Element | string) => {
@@ -167,7 +167,7 @@ export const animations = {
         return gsap.fromTo(
           element,
           { opacity: 0, scale: 0.95 },
-          { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }
         );
       },
       exit: (element: Element | string) => {
@@ -232,7 +232,7 @@ export const animationUtils = {
   onScroll: (
     element: Element | string,
     animation: gsap.TweenVars,
-    trigger?: string,
+    trigger?: string
   ) => {
     return gsap.fromTo(
       element,
@@ -245,7 +245,7 @@ export const animationUtils = {
           end: "bottom 20%",
           toggleActions: "play none none reverse",
         },
-      },
+      }
     );
   },
 };

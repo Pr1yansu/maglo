@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import useConfirm from "@/hooks/use-confirm";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEntranceAnimation } from "@/hooks/use-animations";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -85,10 +86,17 @@ const Invoices = () => {
 
   const [selected, setSelected] = useState<Invoice[]>([]);
 
+  // Animation refs
+  const headerRef = useEntranceAnimation(0);
+  const tableRef = useEntranceAnimation(0.2);
+
   return (
     <div>
       <ConfirmDialog />
-      <div className="flex justify-between items-center mb-4 flex-wrap">
+      <div
+        ref={headerRef}
+        className="flex justify-between items-center mb-4 flex-wrap opacity-0"
+      >
         <SearchBox
           placeholder="Search Invoices"
           value={searchValue}
@@ -148,25 +156,33 @@ const Invoices = () => {
           </FilterButton>
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        data={rows}
-        searchConfig={{
-          enabled: true,
-          useUrlParams: true,
-          paramNames: { query: "search", status: "status" },
-          getFields: (row: Invoice) => ({
-            name: row.client.name,
-            invoiceNumber: row.client.invoiceNumber,
-            email: row.client.email,
-            type: row.type,
-            status: row.status,
-          }),
-          weights: { name: 3, invoiceNumber: 2, email: 2, type: 1, status: 1 },
-          statusFieldKey: "status",
-        }}
-        onSelectionChange={setSelected}
-      />
+      <div ref={tableRef} className="opacity-0">
+        <DataTable
+          columns={columns}
+          data={rows}
+          searchConfig={{
+            enabled: true,
+            useUrlParams: true,
+            paramNames: { query: "search", status: "status" },
+            getFields: (row: Invoice) => ({
+              name: row.client.name,
+              invoiceNumber: row.client.invoiceNumber,
+              email: row.client.email,
+              type: row.type,
+              status: row.status,
+            }),
+            weights: {
+              name: 3,
+              invoiceNumber: 2,
+              email: 2,
+              type: 1,
+              status: 1,
+            },
+            statusFieldKey: "status",
+          }}
+          onSelectionChange={setSelected}
+        />
+      </div>
     </div>
   );
 };

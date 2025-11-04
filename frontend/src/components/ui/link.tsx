@@ -24,7 +24,7 @@ const Link = ({
   state,
   preventTransition = false,
   transitionDirection,
-  transitionType = "slide",
+  transitionType, // Remove default, let it use context default
   className,
   onClick,
   ...props
@@ -36,6 +36,7 @@ const Link = ({
     setTransitionDirection,
     setTransitionType,
     isTransitioning,
+    transitionType: contextTransitionType, // Get from context
   } = useTransition();
 
   const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -79,14 +80,18 @@ const Link = ({
     const direction =
       transitionDirection || determineDirection(location.pathname, to);
     setTransitionDirection(direction);
-    setTransitionType(transitionType);
+
+    // Only set transition type if explicitly provided, otherwise use context default
+    if (transitionType) {
+      setTransitionType(transitionType);
+    }
 
     if (preventTransition) {
       navigate(to, { replace, state });
     } else {
       await startTransition(() => {
         navigate(to, { replace, state });
-      }, transitionType);
+      }, transitionType || contextTransitionType);
     }
   };
 

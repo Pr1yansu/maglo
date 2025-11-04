@@ -15,15 +15,8 @@ import {
   Settings as SettingsIcon,
 } from "lucide-react";
 import { ThemeSwitcher } from "@/components/ui/mode-toggle";
-import {
-  useEntranceAnimation,
-  useStaggerAnimation,
-} from "@/hooks/use-animations";
 
 const Settings = () => {
-  const containerRef = useEntranceAnimation(0);
-  const { itemsRef } = useStaggerAnimation(0.15);
-
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
@@ -54,12 +47,9 @@ const Settings = () => {
   };
 
   return (
-    <div ref={containerRef} className="space-y-8 max-w-4xl opacity-0">
+    <div className="space-y-8 max-w-4xl">
       {/* Header */}
-      <div
-        ref={(el) => (itemsRef.current[0] = el)}
-        className="flex items-center space-x-4 opacity-0"
-      >
+      <div className="flex items-center space-x-4">
         <div className="p-2 bg-primary/10 rounded-lg">
           <SettingsIcon className="h-6 w-6 text-primary" />
         </div>
@@ -72,10 +62,7 @@ const Settings = () => {
       </div>
 
       {/* Profile Settings */}
-      <div
-        ref={(el) => (itemsRef.current[1] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <User className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Profile Information</h2>
@@ -119,19 +106,8 @@ const Settings = () => {
           </div>
 
           <div className="flex justify-end space-x-2">
-            <Button
-              ref={(el) => (itemsRef.current[7] = el)}
-              variant="outline"
-              className="opacity-0"
-            >
-              Cancel
-            </Button>
-            <Button
-              ref={(el) => (itemsRef.current[8] = el)}
-              className="opacity-0"
-            >
-              Save Changes
-            </Button>
+            <Button variant="outline">Cancel</Button>
+            <Button>Save Changes</Button>
           </div>
         </div>
       </div>
@@ -139,10 +115,7 @@ const Settings = () => {
       <Separator />
 
       {/* Appearance Settings */}
-      <div
-        ref={(el) => (itemsRef.current[2] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <Palette className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Appearance</h2>
@@ -185,10 +158,7 @@ const Settings = () => {
       <Separator />
 
       {/* Notification Settings */}
-      <div
-        ref={(el) => (itemsRef.current[3] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <Bell className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Notifications</h2>
@@ -227,10 +197,7 @@ const Settings = () => {
       <Separator />
 
       {/* Security Settings */}
-      <div
-        ref={(el) => (itemsRef.current[4] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <Shield className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Security</h2>
@@ -244,11 +211,7 @@ const Settings = () => {
                 Last changed 3 months ago
               </p>
             </div>
-            <Button
-              ref={(el) => (itemsRef.current[9] = el)}
-              variant="outline"
-              className="opacity-0"
-            >
+            <Button variant="outline">
               <Lock className="h-4 w-4 mr-2" />
               Change Password
             </Button>
@@ -283,10 +246,7 @@ const Settings = () => {
       <Separator />
 
       {/* Billing Settings */}
-      <div
-        ref={(el) => (itemsRef.current[5] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <CreditCard className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Billing & Subscription</h2>
@@ -335,10 +295,7 @@ const Settings = () => {
       <Separator />
 
       {/* Danger Zone */}
-      <div
-        ref={(el) => (itemsRef.current[6] = el)}
-        className="space-y-6 opacity-0"
-      >
+      <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <Trash2 className="h-5 w-5 text-destructive" />
           <h2 className="text-xl font-semibold text-destructive">
@@ -355,13 +312,7 @@ const Settings = () => {
                 certain.
               </p>
             </div>
-            <Button
-              ref={(el) => (itemsRef.current[10] = el)}
-              variant="destructive"
-              className="opacity-0"
-            >
-              Delete Account
-            </Button>
+            <Button variant="destructive">Delete Account</Button>
           </div>
         </div>
       </div>
