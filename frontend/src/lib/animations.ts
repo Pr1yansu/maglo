@@ -109,6 +109,85 @@ export const animations = {
 
   // Route transitions
   routeTransitions: {
+    // Scale down with background overlay and slide from right
+    scaleSlide: {
+      exit: (element: Element | string) => {
+        const tl = gsap.timeline();
+
+        // Create background overlay
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.backgroundColor = "hsl(var(--background))";
+        overlay.style.zIndex = "-1";
+        overlay.style.opacity = "0";
+        overlay.classList.add("transition-overlay");
+
+        // Set transform origin to center
+        gsap.set(element, {
+          transformOrigin: "center center",
+        });
+
+        // Phase 1: Scale down with background overlay
+        tl.to(element, {
+          scale: 0.7,
+          duration: 0.6,
+          ease: "power2.out",
+        })
+          .to(
+            overlay,
+            {
+              opacity: 1,
+              duration: 0.6,
+              ease: "power2.out",
+            },
+            0
+          )
+          // Phase 2: Pause, then fade out
+          .to(
+            element,
+            {
+              opacity: 0,
+              duration: 0.4,
+              ease: "power2.inOut",
+            },
+            "+=0.3"
+          );
+
+        return tl;
+      },
+      enter: (element: Element | string) => {
+        const tl = gsap.timeline();
+
+        // Set initial state - scaled down, positioned right
+        gsap.set(element, {
+          scale: 0.7,
+          x: "100%", // Start from right
+          opacity: 1,
+          transformOrigin: "center center",
+        });
+
+        // Phase 1: Slide in from right, then scale up
+        tl.to(element, {
+          x: "0%", // Slide to center
+          duration: 0.5,
+          ease: "power2.out",
+        }).to(
+          element,
+          {
+            scale: 1, // Scale up
+            duration: 0.6,
+            ease: "power2.out",
+          },
+          "-=0.2"
+        );
+
+        return tl;
+      },
+    },
     // Slide transitions
     slideLeft: {
       enter: (element: Element | string) => {

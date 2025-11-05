@@ -145,7 +145,7 @@ const AuthLayout = () => {
                       Don't have an account?{" "}
                       <Link
                         to="/register"
-                        className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+                        className="text-primary hover:underline focus:outline-none focus:ring-ring focus:ring-offset-2 rounded-sm"
                         aria-label="Go to registration page"
                       >
                         Register
@@ -156,7 +156,7 @@ const AuthLayout = () => {
                       Already have an account?{" "}
                       <Link
                         to="/login"
-                        className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+                        className="text-primary hover:underline focus:outline-none focus:ring-ring focus:ring-offset-2 rounded-sm"
                         aria-label="Go to login page"
                       >
                         Login

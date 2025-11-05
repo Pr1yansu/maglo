@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   useTransition,
-  TransitionType,
   TransitionDirection,
 } from "@/contexts/transition-context";
 import { cn } from "@/lib/utils";
@@ -14,7 +13,6 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   state?: any;
   preventTransition?: boolean;
   transitionDirection?: TransitionDirection;
-  transitionType?: TransitionType;
 }
 
 const Link = ({
@@ -24,20 +22,14 @@ const Link = ({
   state,
   preventTransition = false,
   transitionDirection,
-  transitionType, // Remove default, let it use context default
   className,
   onClick,
   ...props
 }: LinkProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    startTransition,
-    setTransitionDirection,
-    setTransitionType,
-    isTransitioning,
-    transitionType: contextTransitionType, // Get from context
-  } = useTransition();
+  const { startTransition, setTransitionDirection, isTransitioning } =
+    useTransition();
 
   const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -109,11 +101,6 @@ const Link = ({
 
     setTransitionDirection(direction);
 
-    // Only set transition type if explicitly provided, otherwise use context default
-    if (transitionType) {
-      setTransitionType(transitionType);
-    }
-
     if (preventTransition) {
       console.log("🚀 Direct navigation (no transition)");
       navigate(to, { replace, state });
@@ -121,7 +108,7 @@ const Link = ({
       console.log("🎭 Starting transition animation...");
       await startTransition(() => {
         navigate(to, { replace, state });
-      }, transitionType || contextTransitionType);
+      });
     }
   };
 

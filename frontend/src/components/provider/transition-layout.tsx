@@ -23,7 +23,7 @@ const TransitionContainer = ({ children }: TransitionLayoutProps) => {
 
 const TransitionLayout = ({ children }: TransitionLayoutProps) => {
   return (
-    <TransitionProvider defaultTransitionType="scale">
+    <TransitionProvider>
       <TransitionContainer>{children}</TransitionContainer>
     </TransitionProvider>
   );

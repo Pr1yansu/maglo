@@ -4,24 +4,17 @@ import React, {
   useRef,
   useCallback,
   useState,
-  useEffect,
 } from "react";
-import { animationUtils, gsap } from "@/lib/animations";
+import { gsap } from "gsap";
 
-export type TransitionType = "slide" | "fade" | "scale";
 export type TransitionDirection = "forward" | "backward";
 
 interface TransitionContextType {
   containerRef: React.RefObject<HTMLDivElement>;
   isTransitioning: boolean;
-  startTransition: (
-    callback: () => void,
-    type?: TransitionType
-  ) => Promise<void>;
+  startTransition: (callback: () => void) => Promise<void>;
   setTransitionDirection: (direction: TransitionDirection) => void;
-  setTransitionType: (type: TransitionType) => void;
   transitionDirection: TransitionDirection;
-  transitionType: TransitionType;
 }
 
 const TransitionContext = createContext<TransitionContextType | undefined>(
@@ -30,196 +23,151 @@ const TransitionContext = createContext<TransitionContextType | undefined>(
 
 interface TransitionProviderProps {
   children: React.ReactNode;
-  defaultTransitionType?: TransitionType;
 }
 
-export const TransitionProvider = ({
-  children,
-  defaultTransitionType = "slide",
-}: TransitionProviderProps) => {
+export const TransitionProvider = ({ children }: TransitionProviderProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [transitionType, setTransitionType] = useState<TransitionType>(
-    defaultTransitionType
-  );
 
   const [transitionDirection, _setTransitionDirection] =
     useState<TransitionDirection>("forward");
   const directionRef = useRef<TransitionDirection>("forward");
-
-  // Refs for overlay elements
-  const whiteOverlayRef = useRef<HTMLDivElement | null>(null);
-  const blackOverlayRef = useRef<HTMLDivElement | null>(null);
 
   const setTransitionDirection = (direction: TransitionDirection) => {
     directionRef.current = direction;
     _setTransitionDirection(direction);
   };
 
-  useEffect(() => {
-    // Create overlay elements
-    const whiteOverlay = document.createElement("div");
-    const blackOverlay = document.createElement("div");
-
-    // Style white overlay
-    whiteOverlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: white;
-      z-index: 9998;
-      transform: translateX(-100%);
-      pointer-events: none;
-    `;
-
-    // Style black overlay
-    blackOverlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      z-index: 9999;
-      transform: translateX(-100%);
-      pointer-events: none;
-    `;
-
-    document.body.appendChild(whiteOverlay);
-    document.body.appendChild(blackOverlay);
-
-    whiteOverlayRef.current = whiteOverlay;
-    blackOverlayRef.current = blackOverlay;
-
-    return () => {
-      animationUtils.transitionUtils.showScrollbars();
-      if (containerRef.current) {
-        animationUtils.transitionUtils.cleanup(containerRef.current);
-      }
-      // Clean up overlay elements
-      if (whiteOverlay.parentNode) {
-        whiteOverlay.parentNode.removeChild(whiteOverlay);
-      }
-      if (blackOverlay.parentNode) {
-        blackOverlay.parentNode.removeChild(blackOverlay);
-      }
-    };
-  }, []);
-
   const startTransition = useCallback(
-    async (callback: () => void, _type?: TransitionType) => {
-      if (
-        isTransitioning ||
-        !containerRef.current ||
-        !whiteOverlayRef.current ||
-        !blackOverlayRef.current
-      )
-        return;
+    async (callback: () => void) => {
+      if (isTransitioning || !containerRef.current) return;
 
-      console.log("🎬 Starting route transition animation...");
       setIsTransitioning(true);
-      animationUtils.transitionUtils.hideScrollbars();
-
-      const direction = directionRef.current;
-      const whiteOverlay = whiteOverlayRef.current;
-      const blackOverlay = blackOverlayRef.current;
-      const container = containerRef.current;
-
-      console.log(`📍 Direction: ${direction}`);
-
-      // Set initial positions based on direction
-      const fromX = direction === "forward" ? "-100%" : "100%";
-      const toX = direction === "forward" ? "100%" : "-100%";
 
       try {
-        // Reset overlay positions
-        gsap.set([whiteOverlay, blackOverlay], { x: fromX });
+        const container = containerRef.current;
 
-        // Create the animation timeline
-        const tl = gsap.timeline();
+        // Create background overlay for better visual contrast
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.backgroundColor = "hsl(var(--background))"; // Use CSS variable for theme support
+        overlay.style.zIndex = "-1";
+        overlay.style.opacity = "0";
+        overlay.classList.add("transition-overlay");
 
-        console.log("⚪ White box sliding in...");
-        // Step 1: White box comes from left/right across screen
-        tl.to(whiteOverlay, {
-          x: "0%",
-          duration: 0.4,
-          ease: "power3.out",
+        container.parentElement?.appendChild(overlay);
+
+        // Set transform origin to center for proper scaling
+        gsap.set(container, {
+          transformOrigin: "center center",
         });
 
-        console.log("⚫ Black box overlapping...");
-        // Step 2: Black box overlaps white box (slight delay for overlap effect)
-        tl.to(
-          blackOverlay,
-          {
-            x: "0%",
-            duration: 0.3,
-            ease: "power3.out",
-          },
-          "-=0.1"
-        );
+        // Phase 1: Scale down current page to center AND fade in background
+        const scaleDownTl = gsap.timeline();
 
-        // Step 3: Pre-hide the container to prevent flicker
-        tl.call(() => {
-          console.log("🫥 Pre-hiding container to prevent flicker...");
-          gsap.set(container, { opacity: 0 });
-        });
-
-        // Step 4: Execute the route change callback during black overlay
-        tl.call(() => {
-          console.log("🔄 Executing route change...");
-          callback();
-        });
-
-        // Small delay to ensure route change is processed
-        tl.to({}, { duration: 0.1 });
-
-        console.log("⚫ Black box sliding out...");
-        // Step 5: Black box exits to right/left
-        tl.to(blackOverlay, {
-          x: toX,
-          duration: 0.3,
-          ease: "power3.in",
-        });
-
-        console.log("⚪ White box sliding out...");
-        // Step 6: White box exits to right/left (overlapping with black box exit)
-        tl.to(
-          whiteOverlay,
-          {
-            x: toX,
-            duration: 0.4,
-            ease: "power3.in",
-          },
-          "-=0.15"
-        );
-
-        // Step 7: Start fading in content slightly before overlays finish exiting
-        console.log("✨ Fading in new content...");
-        tl.to(
-          container,
-          {
-            opacity: 1,
+        scaleDownTl
+          .to(container, {
+            scale: 0.7,
             duration: 0.6,
             ease: "power2.out",
-          },
-          "-=0.2"
-        );
+          })
+          .to(
+            overlay,
+            {
+              opacity: 1,
+              duration: 0.6,
+              ease: "power2.out",
+            },
+            0
+          ); // Start overlay fade at same time
 
-        // Wait for the timeline to complete
-        await tl;
+        // Wait for scale-down to complete and hold for a moment
+        await scaleDownTl;
 
-        console.log("🎉 Route transition complete!");
-        // Reset overlay positions for next transition
-        gsap.set([whiteOverlay, blackOverlay], { x: fromX });
+        // Brief pause to let user see the scaled-down state
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Phase 2: Fade out current page
+        const fadeOutTl = gsap.timeline();
+
+        fadeOutTl.to(container, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+        });
+
+        await fadeOutTl;
+
+        // Execute the callback (route change)
+        callback();
+
+        // Delay to ensure DOM updates
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Phase 3: Prepare new page (start from the right side)
+        gsap.set(container, {
+          scale: 0.7,
+          x: "100%", // Start from right side
+          opacity: 1,
+          transformOrigin: "center center",
+        });
+
+        // Phase 4: Slide in from right and scale up new page
+        const entranceTl = gsap.timeline();
+
+        entranceTl
+          .to(container, {
+            x: "0%", // Slide to center
+            duration: 0.5,
+            ease: "power2.out",
+          })
+          .to(
+            container,
+            {
+              scale: 1, // Scale up to full size
+              duration: 0.6,
+              ease: "power2.out",
+            },
+            "-=0.2" // Overlap scaling with sliding
+          )
+          .to(
+            overlay,
+            {
+              opacity: 0,
+              duration: 0.4,
+              ease: "power2.out",
+            },
+            "-=0.4"
+          ); // Fade out overlay during scale-up
+
+        await entranceTl;
+
+        // Cleanup overlay
+        overlay.remove();
       } catch (error) {
         console.error("❌ Transition error:", error);
-        // Reset states on error
-        gsap.set([whiteOverlay, blackOverlay], { x: fromX });
-        gsap.set(container, { opacity: 1 });
+
+        // Emergency cleanup - ensure container is visible and positioned correctly
+        if (containerRef.current) {
+          gsap.set(containerRef.current, {
+            scale: 1,
+            x: "0%",
+            opacity: 1,
+            transformOrigin: "center center",
+            clearProps: "all",
+          });
+        }
+
+        // Cleanup overlay in case of error
+        const overlay = document.querySelector(".transition-overlay");
+        if (overlay) {
+          overlay.remove();
+        }
       } finally {
-        animationUtils.transitionUtils.showScrollbars();
         setIsTransitioning(false);
       }
     },
@@ -231,9 +179,7 @@ export const TransitionProvider = ({
     isTransitioning,
     startTransition,
     setTransitionDirection,
-    setTransitionType,
     transitionDirection,
-    transitionType,
   };
 
   return (

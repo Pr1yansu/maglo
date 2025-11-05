@@ -160,7 +160,6 @@ export function DashboardSidebar() {
                       "text-zinc-700 dark:text-secondary-foreground",
                       "transition-all duration-300 ease-in-out",
                       "hover:bg-primary hover:text-zinc-900 dark:hover:text-zinc-900",
-                      "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                       isActive(pathname, item.url) &&
                         "bg-primary text-zinc-900 dark:text-zinc-900 shadow-sm"
                     )}

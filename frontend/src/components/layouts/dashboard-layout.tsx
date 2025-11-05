@@ -8,7 +8,6 @@ import {
 const DashboardLayout = () => {
   return (
     <>
-      {/* Skip navigation links for accessibility */}
       <div className="sr-only focus-within:not-sr-only focus-within:absolute focus-within:top-4 focus-within:left-4 focus-within:z-50 focus-within:flex focus-within:gap-2">
         <a
           href="#main-content"
@@ -24,7 +23,7 @@ const DashboardLayout = () => {
         </a>
       </div>
 
-      <div className="min-h-screen bg-background">
+      <div className="h-screen bg-background flex flex-col">
         <SidebarProvider>
           {/* Navigation landmark */}
           <nav
@@ -36,10 +35,10 @@ const DashboardLayout = () => {
           </nav>
 
           {/* Main content area */}
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col flex-1 w-full min-h-0">
             {/* Header landmark */}
             <header
-              className="p-5 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+              className="p-5 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex-shrink-0"
               role="banner"
               aria-label="Dashboard header"
             >
@@ -49,7 +48,7 @@ const DashboardLayout = () => {
             {/* Main content landmark */}
             <main
               id="main-content"
-              className="flex-1 p-5 w-full overflow-x-auto"
+              className="flex-1 p-5 w-full overflow-auto min-h-0"
               role="main"
               aria-label="Dashboard main content"
             >

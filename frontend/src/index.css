@@ -32,6 +32,11 @@
         --sidebar-accent-foreground: 240 5.9% 10%;
         --sidebar-border: 220 13% 91%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+        --chart-1: 142 76% 36%;
+        --chart-2: 346 87% 43%;
+        --chart-3: 221 83% 53%;
+        --chart-4: 47 96% 89%;
+        --chart-5: 27 87% 67%;
     }
 
     .dark {
@@ -62,6 +67,11 @@
         --sidebar-accent-foreground: 240 4.8% 95.9%;
         --sidebar-border: 240 3.7% 15.9%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+        --chart-1: 142 70% 45%;
+        --chart-2: 346 77% 49%;
+        --chart-3: 221 83% 53%;
+        --chart-4: 47 96% 89%;
+        --chart-5: 27 87% 67%;
     }
 }
 
@@ -140,6 +150,20 @@
 
     .transitioning * {
         overflow: hidden !important;
+    }
+
+    /* Prevent layout shifts during transitions */
+    .transition-container {
+        contain: layout style paint;
+        will-change: transform, opacity;
+        position: relative;
+        overflow: hidden !important;
+    }
+
+    .transition-container.stabilized {
+        contain: strict;
+        transform: translateZ(0);
+        /* Force hardware acceleration */
     }
 
     /* Smooth scrollbar appearance */
