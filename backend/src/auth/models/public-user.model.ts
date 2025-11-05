@@ -3,9 +3,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 export enum AuthProviderModel {
   LOCAL = 'local',
   GOOGLE = 'google',
-  GITHUB = 'github',
-  MICROSOFT = 'microsoft',
-  APPLE = 'apple',
+  FACEBOOK = 'facebook',
 }
 
 registerEnumType(AuthProviderModel, { name: 'AuthProvider' });

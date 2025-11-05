@@ -12,9 +12,7 @@ import { User } from '../database/schema';
 const providerMap: Record<string, AuthProviderModel> = {
   local: AuthProviderModel.LOCAL,
   google: AuthProviderModel.GOOGLE,
-  github: AuthProviderModel.GITHUB,
-  microsoft: AuthProviderModel.MICROSOFT,
-  apple: AuthProviderModel.APPLE,
+  facebook: AuthProviderModel.FACEBOOK,
 };
 
 function toGraphQLUser(user: PublicUser): PublicUserModel {

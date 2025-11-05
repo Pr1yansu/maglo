@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { User } from '../database/schema';
+import { User, type NewUser } from '../database/schema';
 
 const DEFAULT_SALT_ROUNDS = 12;
 
@@ -24,6 +24,15 @@ export interface PublicUser {
 export interface AuthResult {
   accessToken: string;
   user: PublicUser;
+}
+
+export interface OAuthProfile {
+  providerId: string;
+  email?: string | null;
+  fullName?: string | null;
+  avatarUrl?: string | null;
+  emailVerified?: boolean;
+  metadata?: NewUser['metadata'];
 }
 
 @Injectable()
@@ -75,6 +84,39 @@ export class AuthService {
       accessToken,
       user: this.toPublicUser(user),
     };
+  }
+
+  async validateOAuthUser(
+    provider: Exclude<User['provider'], 'local'>,
+    profile: OAuthProfile,
+  ): Promise<User> {
+    if (!profile.providerId) {
+      throw new UnauthorizedException('Missing provider identifier');
+    }
+
+    const user = await this.usersService.upsertOAuthUser({
+      provider,
+      providerId: profile.providerId,
+      email: profile.email ?? null,
+      fullName: profile.fullName ?? null,
+      avatarUrl: profile.avatarUrl ?? null,
+      emailVerified: profile.emailVerified,
+      metadata: profile.metadata,
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Unable to resolve OAuth user');
+    }
+
+    return user;
+  }
+
+  async loginWithOAuth(
+    provider: Exclude<User['provider'], 'local'>,
+    profile: OAuthProfile,
+  ): Promise<AuthResult> {
+    const user = await this.validateOAuthUser(provider, profile);
+    return this.login(user);
   }
 
   async register(options: {

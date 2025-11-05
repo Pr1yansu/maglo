@@ -19,9 +19,7 @@ type Json = Record<string, unknown>;
 export const authProviderEnum = pgEnum('auth_provider', [
   'local',
   'google',
-  'github',
-  'microsoft',
-  'apple',
+  'facebook',
 ]);
 
 export const accountTypeEnum = pgEnum('account_type', [

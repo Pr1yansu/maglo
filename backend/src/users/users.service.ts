@@ -11,6 +11,17 @@ interface CreateUserOptions {
   provider?: NewUser['provider'];
   providerId?: string | null;
   avatarUrl?: string | null;
+  emailVerified?: boolean;
+  metadata?: NewUser['metadata'];
+}
+
+interface UpsertOAuthUserOptions {
+  provider: Exclude<NonNullable<NewUser['provider']>, 'local'>;
+  providerId: string;
+  email?: string | null;
+  fullName?: string | null;
+  avatarUrl?: string | null;
+  emailVerified?: boolean;
   metadata?: NewUser['metadata'];
 }
 
@@ -68,6 +79,7 @@ export class UsersService {
         provider: options.provider ?? 'local',
         providerId: options.providerId ?? null,
         avatarUrl: options.avatarUrl ?? null,
+        emailVerified: options.emailVerified ?? false,
         metadata: options.metadata,
         createdAt: now,
         updatedAt: now,
@@ -75,6 +87,92 @@ export class UsersService {
       .returning();
 
     return user;
+  }
+
+  async upsertOAuthUser(options: UpsertOAuthUserOptions): Promise<User> {
+    const now = new Date();
+    const provider = options.provider;
+    const providerId = options.providerId;
+
+    const baseMetadata =
+      options.metadata ?? ({ oauthProvider: provider } as NewUser['metadata']);
+
+    const providerUser = await this.findByProvider(provider, providerId);
+    if (providerUser) {
+      const [updated] = await this.db
+        .update(users)
+        .set({
+          fullName: options.fullName?.trim().length
+            ? options.fullName.trim()
+            : providerUser.fullName,
+          avatarUrl: options.avatarUrl ?? providerUser.avatarUrl,
+          email:
+            options.email?.toLowerCase() ?? providerUser.email.toLowerCase(),
+          emailVerified:
+            options.emailVerified ?? providerUser.emailVerified ?? false,
+          metadata: baseMetadata ?? providerUser.metadata,
+          updatedAt: now,
+        })
+        // @ts-ignore - Drizzle type inference mismatch within the monorepo build pipeline
+        .where(eq(users.id, providerUser.id))
+        .returning();
+
+      return updated ?? providerUser;
+    }
+
+    if (options.email) {
+      const emailUser = await this.findByEmail(options.email);
+      if (emailUser) {
+        const [updated] = await this.db
+          .update(users)
+          .set({
+            provider,
+            providerId,
+            fullName: options.fullName?.trim().length
+              ? options.fullName.trim()
+              : emailUser.fullName,
+            avatarUrl: options.avatarUrl ?? emailUser.avatarUrl,
+            email: options.email.toLowerCase(),
+            emailVerified:
+              options.emailVerified ?? emailUser.emailVerified ?? false,
+            metadata: baseMetadata ?? emailUser.metadata,
+            updatedAt: now,
+          })
+          // @ts-ignore - Drizzle type inference mismatch within the monorepo build pipeline
+          .where(eq(users.id, emailUser.id))
+          .returning();
+
+        return updated ?? emailUser;
+      }
+    }
+
+    const fallbackEmail = (
+      options.email?.toLowerCase() ?? `${providerId}@${provider}.oauth.maglo`
+    ).trim();
+
+    const computedFullName = (() => {
+      const raw = options.fullName ?? options.email ?? provider;
+      const safe = raw?.trim();
+      return safe && safe.length > 0 ? safe : `${provider} user`;
+    })();
+
+    const [created] = await this.db
+      .insert(users)
+      .values({
+        email: fallbackEmail,
+        fullName: computedFullName,
+        password: null,
+        provider,
+        providerId,
+        avatarUrl: options.avatarUrl ?? null,
+        emailVerified: options.emailVerified ?? Boolean(options.email),
+        metadata: baseMetadata,
+        createdAt: now,
+        updatedAt: now,
+      })
+      .returning();
+
+    return created;
   }
 
   async updateLastLogin(userId: string): Promise<void> {
