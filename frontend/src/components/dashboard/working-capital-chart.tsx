@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatCurrency, cn } from "@/lib/utils";
-import { TrendingUp, TrendingDown, Calendar, ChevronDown } from "lucide-react";
+import { TrendingUp, TrendingDown, ChevronDown } from "lucide-react";
 
 interface WorkingCapitalData {
   type: "income" | "expense";
@@ -50,7 +50,6 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
     return `$${value.toFixed(0)}`;
   };
 
-  // Format date labels based on granularity
   const formatDateLabel = (date: Date, granularity: Granularity): string => {
     switch (granularity) {
       case "weekly":
@@ -168,12 +167,12 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
   return (
     <>
       <Card className="w-full">
-        <CardHeader className="space-y-6">
-          <div className="flex items-center justify-between gap-4">
+        <CardHeader className="space-y-4">
+          <div className="flex flex-row sm:items-center justify-between gap-4">
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              Working Capital Flow
+              Capital Flow
             </CardTitle>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm max-lg:hidden">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
                 <span className="text-muted-foreground">Income</span>
@@ -188,7 +187,7 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
                   {formatCurrency(summaryStats.totalExpense)}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-1">
                 {summaryStats.netFlow >= 0 ? (
                   <TrendingUp className="h-4 w-4 text-emerald-500" />
                 ) : (
@@ -211,7 +210,7 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 min-w-[120px] justify-between"
+                  className="flex items-center gap-2 min-w-[120px] justify-between w-auto"
                 >
                   {granularity.charAt(0).toUpperCase() + granularity.slice(1)}
                   <ChevronDown className="h-4 w-4" />
@@ -237,33 +236,33 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
         </CardHeader>
 
         <CardContent className="p-0 rounded-md">
-          <ChartContainer config={chartConfig} className="h-[400px] w-full">
-            <LineChart data={processedData}>
-              <CartesianGrid
-                strokeDasharray="1 1"
-                className="opacity-20"
-                horizontal={true}
-                vertical={true}
-                stroke="hsl(var(--border))"
-              />
+          <ChartContainer config={chartConfig}>
+            <LineChart
+              accessibilityLayer
+              data={processedData}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="dateLabel"
-                tick={{ fontSize: 12 }}
-                tickLine={true}
-                axisLine={true}
-                angle={0}
-                textAnchor="middle"
-                height={50}
-                stroke="hsl(var(--muted-foreground))"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                angle={granularity === "weekly" ? -45 : 0}
+                textAnchor={granularity === "weekly" ? "end" : "middle"}
+                height={granularity === "weekly" ? 80 : 50}
               />
               <YAxis
-                tick={{ fontSize: 12 }}
-                tickLine={true}
-                axisLine={true}
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
                 tickFormatter={(value) => formatCurrencyShort(value)}
-                stroke="hsl(var(--muted-foreground))"
               />
               <ChartTooltip
+                cursor={false}
                 content={
                   <ChartTooltipContent
                     formatter={(value, name) => [
@@ -275,48 +274,26 @@ const WorkingCapitalChart = ({ data }: WorkingCapitalChartProps) => {
                 }
               />
               <Line
-                type="monotone"
                 dataKey="income"
+                type="monotone"
                 stroke="var(--color-income)"
-                strokeWidth={3}
-                dot={{ fill: "var(--color-income)", strokeWidth: 2, r: 4 }}
-                activeDot={{
-                  r: 8,
-                  stroke: "var(--color-income)",
-                  strokeWidth: 1,
-                  fill: "var(--color-income)",
-                  style: {
-                    filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))",
-                  },
-                }}
-                connectNulls={false}
+                strokeWidth={2}
+                dot={false}
               />
               <Line
-                type="monotone"
                 dataKey="expense"
+                type="monotone"
                 stroke="var(--color-expense)"
-                strokeWidth={3}
-                dot={{ fill: "var(--color-expense)", strokeWidth: 2, r: 4 }}
-                activeDot={{
-                  r: 8,
-                  stroke: "var(--color-expense)",
-                  strokeWidth: 1,
-                  fill: "var(--color-expense)",
-                  style: {
-                    filter: "drop-shadow(0 0 6px rgba(239, 68, 68, 0.6))",
-                  },
-                }}
-                connectNulls={false}
+                strokeWidth={2}
+                dot={false}
               />
             </LineChart>
           </ChartContainer>
-
-          {/* Additional Insights */}
         </CardContent>
       </Card>
       <div className="mt-6 p-4 bg-muted/20 rounded-lg border-0">
         <h4 className="text-sm font-medium mb-3 text-foreground">Insights</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-muted-foreground">
           <div>
             Average Income:{" "}
             <span className="text-emerald-600 font-medium">

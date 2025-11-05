@@ -1,7 +1,4 @@
 import { SEO } from "@/components/SEO";
-import { CreditCard } from "@/components/ui/credit-card";
-import StackedCards from "@/components/ui/stacked-credit-cards";
-import cardsData from "@/pages/dashboard/wallets/data.json";
 import {
   Wallet,
   TrendingUp,
@@ -9,15 +6,22 @@ import {
   DollarSign,
   Receipt,
   CreditCard as CreditCardIcon,
+  Menu,
 } from "lucide-react";
 import RealTimeCards from "@/components/dashboard/realtime-cards";
 import WorkingCapitalChart from "@/components/dashboard/working-capital-chart";
 import { dashboardColumns } from "@/pages/dashboard/transaction/transaction-table/dashboard-columns";
 import { DataTable } from "@/components/ui/data-table";
-import ListData from "@/pages/dashboard/wallets/list-data";
-import paymentData from "@/pages/dashboard/wallets/payment-data.json";
-
-const cards = cardsData as CreditCard[];
+import WalletSidebar from "@/components/dashboard/wallet-sidebar";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const RealTimeCardData = [
   {
@@ -124,22 +128,44 @@ const Dashboard = () => {
       />
 
       <div className="space-y-6">
-        {/* Main Dashboard Content */}
-        <div className="lg:flex lg:gap-6 w-full">
-          {/* Left Section - Overview Cards */}
+        <div className="flex lg:gap-6 w-full">
           <section
-            className="lg:w-2/3 space-y-6"
+            className="w-full space-y-6"
             aria-labelledby="overview-heading"
           >
+            <div className="flex items-center justify-between flex-wrap">
+              <div>
+                <header className="mb-4">
+                  <h1 id="overview-heading" className="text-2xl font-semibold">
+                    Financial Overview
+                  </h1>
+                  <p className="text-muted-foreground">
+                    Track your financial metrics and performance
+                  </p>
+                </header>
+              </div>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="2xl:hidden">
+                    <Menu className="h-4 w-4 mr-2" />
+                    Wallets & Payments
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-full sm:max-w-md">
+                  <SheetHeader>
+                    <SheetTitle>Your Wallets</SheetTitle>
+                    <SheetDescription>
+                      Manage your payment methods and scheduled payments
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    <WalletSidebar />
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+
             <div>
-              <header className="mb-4">
-                <h1 id="overview-heading" className="text-2xl font-semibold">
-                  Financial Overview
-                </h1>
-                <p className="text-muted-foreground">
-                  Track your financial metrics and performance
-                </p>
-              </header>
               <RealTimeCards data={RealTimeCardData} />
             </div>
 
@@ -156,38 +182,10 @@ const Dashboard = () => {
           </section>
 
           <aside
-            className="lg:w-1/3 mt-8 lg:mt-0"
+            className="hidden 2xl:block mt-8 lg:mt-0 w-96"
             aria-labelledby="wallet-heading"
           >
-            <header className="mb-4">
-              <h2 id="wallet-heading" className="text-lg font-semibold">
-                Your Wallets
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Manage your payment methods
-              </p>
-            </header>
-            <StackedCards cards={cards} />
-            <div>
-              <header className="mt-6 mb-4">
-                <h2 className="text-lg font-semibold">Scheduled Payments</h2>
-              </header>
-              {paymentData.length > 0 ? (
-                paymentData.map((payment, indx) => (
-                  <ListData
-                    key={indx}
-                    amount={payment.amount}
-                    date={new Date(payment.date)}
-                    image={payment.image}
-                    name={payment.name}
-                  />
-                ))
-              ) : (
-                <p className="text-muted-foreground">
-                  No scheduled payments found.
-                </p>
-              )}
-            </div>
+            <WalletSidebar />
           </aside>
         </div>
       </div>
