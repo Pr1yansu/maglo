@@ -67,8 +67,6 @@ export default function StackedCards({
     const els = itemRefs.current.filter(Boolean) as HTMLLIElement[];
 
     const getResponsiveTransform = (offset = 0, scale = 1) => {
-      const width = window.innerWidth;
-
       let translateX = "0";
       let offsetY = offset * 12;
 

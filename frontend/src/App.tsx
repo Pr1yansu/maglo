@@ -27,6 +27,7 @@ const DashboardSettings = lazy(
 );
 const Help = lazy(() => import("../src/pages/dashboard/help/help"));
 const NotFound = lazy(() => import("../src/pages/not-found"));
+const AuthCallback = lazy(() => import("./pages/auth/callback"));
 
 function App() {
   usePerformanceMetrics();
@@ -43,6 +44,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
+
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
           <Route
             element={

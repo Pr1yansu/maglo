@@ -6,13 +6,13 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@/components/provider/theme-provider.tsx";
 import TransitionLayout from "@/components/provider/transition-layout.tsx";
+import { ApolloProvider } from "@apollo/client";
+import { Provider } from "react-redux";
+import { apolloClient } from "@/lib/apollo-client";
+import { store } from "@/store/store";
+import { hydrateSession } from "@/store/auth/auth-slice";
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: import.meta.env.VITE_GRAPHQL_URL || "http://localhost:3000/graphql",
-  cache: new InMemoryCache(),
-});
+store.dispatch(hydrateSession());
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -20,12 +20,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <TransitionLayout>
         <BrowserRouter>
           <HelmetProvider>
-            <ApolloProvider client={client}>
-              <App />
+            <ApolloProvider client={apolloClient}>
+              <Provider store={store}>
+                <App />
+              </Provider>
             </ApolloProvider>
           </HelmetProvider>
         </BrowserRouter>
       </TransitionLayout>
     </ThemeProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

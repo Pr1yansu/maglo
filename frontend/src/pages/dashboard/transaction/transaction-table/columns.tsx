@@ -3,7 +3,6 @@ import { Ellipsis } from "lucide-react";
 import useConfirm from "@/hooks/use-confirm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,

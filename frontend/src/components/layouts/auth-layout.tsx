@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 
 import Image from "@/components/ui/image";
@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import GoogleIcon from "@/components/assets/google";
 import FacebookIcon from "@/components/assets/facebook";
+import { useAuth } from "@/hooks/use-auth";
+import Loader from "@/components/loader";
 
 const AuthLayout = () => {
   const pathname = useLocation().pathname;
@@ -15,6 +17,8 @@ const AuthLayout = () => {
   const rightContainer = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [currentPath, setCurrentPath] = useState(pathname);
+  const navigate = useNavigate();
+  const { beginOAuth, isAuthenticated, isHydrating, isProcessing } = useAuth();
 
   // --- Animation Effect on Route Change ---
   useGSAP(() => {
@@ -52,12 +56,21 @@ const AuthLayout = () => {
   }, [pathname]);
 
   useEffect(() => {
+    if (isAuthenticated && !isHydrating) {
+      navigate("/dashboard", { replace: true });
+      return;
+    }
+
     gsap.fromTo(
       contentRef.current,
       { opacity: 0, y: 10 },
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
-  }, [currentPath]);
+  }, [currentPath, isAuthenticated, isHydrating, navigate]);
+
+  if (isHydrating) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -123,6 +136,9 @@ const AuthLayout = () => {
                     <Button
                       variant="outline"
                       className="w-full"
+                      type="button"
+                      disabled={isProcessing}
+                      onClick={() => beginOAuth("google")}
                       aria-label="Continue with Google account"
                     >
                       <GoogleIcon aria-hidden="true" />
@@ -131,6 +147,9 @@ const AuthLayout = () => {
                     <Button
                       variant="outline"
                       className="w-full"
+                      type="button"
+                      disabled={isProcessing}
+                      onClick={() => beginOAuth("facebook")}
                       aria-label="Continue with Facebook account"
                     >
                       <FacebookIcon aria-hidden="true" />

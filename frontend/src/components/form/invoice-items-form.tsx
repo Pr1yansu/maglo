@@ -103,22 +103,6 @@ const InvoiceItemsForm = () => {
     form.setValue(`items.${index}.amount`, total);
   };
 
-  const clearFields = () => {
-    form.reset({
-      items: [
-        {
-          productName: "",
-          description: "",
-          quantity: 1,
-          rate: 0,
-          amount: 0,
-          discount: 0,
-          tax: 0,
-        },
-      ],
-    });
-  };
-
   const clearItemFields = (index: number) => {
     form.setValue(`items.${index}.productName`, "");
     form.setValue(`items.${index}.description`, "");

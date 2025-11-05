@@ -19,13 +19,13 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { SEO } from "@/components/SEO";
 import SendIcon from "@/components/assets/send";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 
 gsap.registerPlugin(MorphSVGPlugin);
 
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, { message: "Username must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters." }),
@@ -33,20 +33,30 @@ const formSchema = z.object({
 
 const Login = () => {
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login, isProcessing } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    if (loading) return;
-    setLoading(true);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (isProcessing) return;
+
+    try {
+      setErrorMessage(null);
+      await login({ email: values.email, password: values.password });
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to sign in.";
+      setErrorMessage(message);
+    }
   };
 
   return (
@@ -70,21 +80,21 @@ const Login = () => {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="username">Email</FormLabel>
+                <FormLabel htmlFor="email">Email</FormLabel>
                 <FormControl>
                   <Input
-                    id="username"
+                    id="email"
                     type="email"
                     placeholder="Example@email.com"
                     autoComplete="email"
-                    aria-describedby="username-error"
+                    aria-describedby="email-error"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage id="username-error" />
+                <FormMessage id="email-error" />
               </FormItem>
             )}
           />
@@ -121,12 +131,19 @@ const Login = () => {
             type="submit"
             className="w-full flex items-center justify-center gap-2"
             ref={btnRef}
-            disabled={loading}
-            aria-label={loading ? "Signing in..." : "Sign in to your account"}
+            disabled={isProcessing}
+            aria-label={
+              isProcessing ? "Signing in..." : "Sign in to your account"
+            }
           >
-            {loading ? "Signing in..." : "Submit"}
+            {isProcessing ? "Signing in..." : "Submit"}
             <SendIcon aria-hidden="true" />
           </Button>
+          {errorMessage && (
+            <p className="text-sm text-destructive text-center" role="alert">
+              {errorMessage}
+            </p>
+          )}
         </form>
       </Form>
     </>

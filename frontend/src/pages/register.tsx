@@ -13,10 +13,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+    fullName: z
+      .string()
+      .min(2, { message: "Name must be at least 2 characters." }),
     email: z.string().email({ message: "Invalid email address." }),
     password: z
       .string()
@@ -31,18 +36,36 @@ const registerSchema = z
   });
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { register: registerUser, isProcessing } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    if (isProcessing) return;
+
+    try {
+      setErrorMessage(null);
+      await registerUser({
+        fullName: values.fullName,
+        email: values.email,
+        password: values.password,
+      });
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to create account.";
+      setErrorMessage(message);
+    }
   };
 
   return (
@@ -68,7 +91,7 @@ const Register = () => {
           >
             <FormField
               control={form.control}
-              name="name"
+              name="fullName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
@@ -147,9 +170,15 @@ const Register = () => {
               type="submit"
               className="w-full"
               aria-label="Create your Maglo account"
+              disabled={isProcessing}
             >
-              Create Account
+              {isProcessing ? "Creating..." : "Create Account"}
             </Button>
+            {errorMessage && (
+              <p className="text-sm text-destructive text-center" role="alert">
+                {errorMessage}
+              </p>
+            )}
           </form>
         </Form>
       </main>

@@ -5,6 +5,7 @@ import type { SignOptions } from 'jsonwebtoken';
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
+import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
@@ -32,6 +33,7 @@ import { FacebookStrategy } from './strategies/facebook.strategy';
       },
     }),
   ],
+  controllers: [AuthController],
   providers: [
     AuthService,
     AuthResolver,
