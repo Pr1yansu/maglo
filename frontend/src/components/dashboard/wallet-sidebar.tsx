@@ -16,7 +16,7 @@ const WalletSidebar = () => {
             Manage your payment methods
           </p>
         </header>
-        <StackedCards cards={cards} className="w-full max-w-96" />
+        <StackedCards cards={cards} className="w-full max-w-96 xl:w-96" />
       </div>
 
       <div>
